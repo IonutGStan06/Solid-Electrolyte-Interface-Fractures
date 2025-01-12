@@ -1,0 +1,1693 @@
+\documentclass[twocolumn]{IEEEtran}
+\raggedbottom
+\usepackage{amsmath, amssymb, graphicx, cite, hyperref, textcomp}
+\usepackage{pdflscape}
+\usepackage{array}
+\usepackage{rotating}
+\usepackage{pgfplots}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{float}
+
+\pgfplotsset{compat=1.16}
+
+
+\title{Modeling of Mechanical Degradation in Lithium-Ion Batteries: An Analysis of Solid Electrolyte Interface Fractures}
+
+\author{
+    Ionu\c{t} Gabriel Stan\IEEEauthorrefmark{2},
+    Dr. Peter Ozaveche Oviroh\href{https://scholar.google.com/citations?user=72x-yOkAAAAJ&hl=en}{\IEEEauthorrefmark{1}}
+}
+
+\begin{document}
+\maketitle
+
+\vspace{5mm}
+
+\textbf{Keywords:} Lithium-ion batteries, solid electrolyte interface fracture, diffusion-induced stress, capacity fade, mechanical degradation; 
+
+\vspace{5mm}
+
+\begin{abstract} This paper develops a comprehensive theoretical framework to model the mechanical degradation of lithium-ion batteries (LIBs), with a particular focus on the solid electrolyte interphase (SEI) layer. By deriving and solving the differential equations for stress and strain distributions in both the SEI and active materials during lithium-ion cycling, this study quantifies the impact of SEI cracking on capacity fade. A strain energy density model is proposed to predict SEI fracture dynamics and establish a relationship between the state-of-lithiation (SOL) amplitude and capacity loss over multiple cycles.
+
+Key contributions include a detailed mathematical analysis of the interplay between radial and tangential stresses, and the development of a capacity fade model that links SEI mechanical properties and material parameters to long-term LIB performance. Additionally, the study offers a comparative evaluation of common electrode materials, such as graphite, silicon, and lithium ion phosphate, to determine their suitability for various applications based on mechanical stability and energy density.
+
+Through this work, we provide critical insights into the mechanics of SEI degradation, offering a way for optimizing LIB materials and design to enhance durability and mitigate capacity loss. \\
+\end{abstract}
+
+\section{Introduction}
+
+\vspace{2mm}
+
+\subsection{Introduction to Lithium-ion Batteries}
+
+\vspace{2mm}
+
+
+
+Lithium-ion batteries (LIBs) have become indispensable in modern energy storage systems due to their high energy density, long cycle life, and lightweight nature. These features have made LIBs the technology of choice for a range of applications, from portable electronics and electric vehicles (EVs) to renewable energy grid storage \cite{tarascon2001issues, bruce2008energy, goodenough2010lithium}. LIBs operate based on the reversible intercalation of lithium ions between the cathode and anode materials, facilitated by a liquid or solid electrolyte \cite{whittingham2004lithium, armand2008building}.
+
+A typical lithium-ion battery (LIB) consists of three key components: an anode, a cathode, and an electrolyte that facilitates the movement of lithium ions between the electrodes during charge and discharge cycles \cite{tarascon2001issues, whittingham2004lithium, nobel2019}. The electrodes are separated by a thin porous separator to prevent direct electrical contact while allowing ionic flow. This layered configuration is shown below, in Figure (\ref{fig:sei_layer}). 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/lib.png}
+    \caption{Schematic of Lithium Ion Battery}
+    \label{fig:sei_layer}
+\end{figure}
+
+In recent years, the growing demand for EVs and renewable energy systems has driven significant research efforts to improve LIB performance. Advances in high-capacity anode materials, such as silicon, and strategies to stabilize the SEI layer have shown promise in extending battery life and enhancing stability under extreme cycling conditions \cite{goodenough2010lithium, bruce2008energy}. Addressing these challenges is critical to achieving global sustainability goals and enabling the transition to carbon-neutral energy systems.
+
+\vspace{2mm}
+
+\subsection{Mechanical Degradation in Lithium-Ion Batteries}
+
+\vspace{2mm}
+
+One of the key challenges limiting the performance and longevity of lithium-ion batteries (LIBs) is mechanical degradation, which arises primarily due to the degradation of electrode materials over repeated charge-discharge cycles \cite{nobel2019, chen2024}. This process induces volumetric changes in the active materials, leading to stress accumulation and eventually to particle fracture, \cite{zhao2016mechanics, cheng2011diffusion_stresses}. Over time, these mechanical stresses compromise the structural integrity of the electrodes, resulting in capacity fade and reduced cycle life \cite{ arora1998battery}.
+
+To ensure the broader adoption of LIBs in applications such as electric vehicles and large-scale energy storage systems, these limitations must be addressed. The development of advanced material and electrode technologies, including the use of surface coatings and improved electrolytes, is essential for enhancing the performance and safety of LIBs.
+
+\vspace{2mm}
+
+\subsection{Theoretical Model}
+
+\vspace{2mm}
+
+The solid electrolyte interphase (SEI) layer is a porous, heterogeneous material formed due to the irreversible decomposition of the electrolyte in contact with the anode surface, particularly carbon-based materials \cite{peled1979sei, verma2010sei}. While the exact composition of the SEI remains partially unresolved, it is generally understood to be a composite structure containing organic and inorganic compounds, such as lithium carbonate (\(\text{Li}_2\text{CO}_3\)) and lithium alkyl carbonates \cite{zhang2006review, laresgoiti2015sei}. 
+
+The thickness of the SEI layer can range from a few angstroms to hundreds of angstroms, depending on the cycling conditions and electrode material properties \cite{laresgoiti2015sei, verma2010sei}. It forms as a passivating film around the active material particles and plays a critical role in stabilizing the interface between the anode and the electrolyte. However, the SEI is not a static structure; it undergoes continuous expansion and contraction due to the volume changes associated with lithium-ion intercalation and de-intercalation. 
+
+During these cycling processes, the SEI layer experiences mechanical stresses that lead to the formation of microcracks\cite{peled1979sei, woodford2010stress}. These cracks expose fresh active material to the electrolyte, triggering additional SEI formation as the electrolyte decomposes on the newly exposed surface. This not only consumes lithium ions but also results in the thickening of the SEI layer, which increases resistance and reduces battery efficiency \cite{laresgoiti2015sei, woodford2010stress}. 
+
+Moreover, the SEI can exhibit a limited rehealing behavior, where some of the cracks seal as new SEI forms (Figure (\ref{fig:crack})). However, this rehealing is often incomplete, leading to uneven layer growth and mechanical instability over time. Lithium ions can become irreversibly trapped within the SEI during this process, further contributing to capacity fade \cite{zhao2016mechanics, woodford2010stress}. The repeated cycle of cracking, rehealing, and ion trapping significantly impacts the long-term performance of lithium-ion batteries, making the SEI layer both a critical enabler and a major bottleneck in battery technology.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/crack and heal.png}
+    \caption{Schematic of Electrode particle crack and rehealing}
+    \label{fig:crack}
+\end{figure}
+
+\vspace{2mm}
+
+\subsection{Research Objectives and Approach}
+
+\vspace{2mm}
+
+The primary objective of this research is to investigate the mechanical degradation mechanisms of lithium-ion batteries (LIBs), focusing on the solid electrolyte interphase (SEI) layer. Specifically, the study aims to:
+
+\begin{itemize}
+    \item \textbf{Model SEI Fractures and Capacity Fade:} Develop a  theoretical framework to quantify the  cracking and mechanical degradation of the SEI layer during cycling, emphasizing on the strains driving fracture formation and link these phenomena to the overall capacity fade in LIBs.
+    \item \textbf{Understand Stress Distributions:} Analyze the distribution of radial and tangential stresses within the SEI layer and active material during lithiation and delithiation.
+    \item \textbf{Predict Long-term Performance:} Predict the long-term performance and capacity fade of LIBs under various cycling conditions, accounting for SEI dynamics and mechanical stresses.
+    \item \textbf{Evaluate Material Properties:} Assess the influence of key material properties, such as Young’s modulus, Poisson’s ratio, and particle dimensions, on the mechanical stability of the SEI layer.
+\end{itemize}
+
+This research employs a multi-faceted approach, combining theoretical modeling, computational analysis, and literature review to achieve its objectives:
+
+\begin{enumerate}
+    \item \textbf{Development of a Mathematical Model:} A theoretical framework is utilized to capture the stress and strain distributions within the SEI layer and active material. 
+    
+    \item \textbf{Stress Analysis and Energy Calculations:} Governing equations for radial and tangential stresses are derived using Hooke's law and equilibrium conditions. Strain energy density is computed to evaluate the energy available for SEI cracking.
+
+    \item \textbf{Crack Formation and Capacity Loss Modeling:} The relationship between SEI layer cracking, rehealing, and capacity fade is established by quantifying the area of new cracks formed per cycle and the corresponding lithium-ion consumption during SEI reformation.
+
+    \item \textbf{State-of-Lithiation Dynamics:} The state-of-lithiation (SOL) and its variations over cycling are analyzed to determine their impact on stress dynamics and crack propagation in the SEI layer.
+
+    \item \textbf{Material Property Evaluation:} The model is applied to various electrode and SEI materials, to assess their suitability and performance under different cycling conditions.
+
+\end{enumerate}
+
+By integrating these approaches, this research aims to provide a detailed understanding of the mechanical degradation processes in LIBs, guiding the development of more robust and efficient battery technologies. \\
+
+
+\section{Body}
+
+\vspace{2mm}
+
+\subsection{Framework for Modeling SEI Dynamics}
+
+\vspace{2mm}
+
+To analyze the mechanical degradation of lithium-ion batteries, we consider a single spherically symmetric electrode particle as the fundamental unit of the model. The particle has an outer radius \( R \), and its core consists of the active material with a radius \( R_P \). Surrounding the active material is the solid electrolyte interphase (SEI) layer, with a thickness \( w \), such that \( w \ll R_P, R \). This configuration is depicted in Figure (\ref{fig:particle_geometry}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/SEI-parameters.png}
+    \caption{Schematic representation of a single electrode particle, showing the active material and SEI layer.}
+    \label{fig:particle_geometry}
+\end{figure}
+
+By focusing on this idealized particle, the model enables the detailed study of stress evolution, strain energy density, and their implications for SEI fracture mechanics and capacity fade.
+
+\vspace{2mm}
+
+\subsection{SEI Fracture Model}
+
+\vspace{2mm}
+
+\subsubsection{Stress Distribution in Spherically Symmetric System}
+
+The stress distribution is derived based on the stress-strain relationship in spherical symmetry. This approach considers a spherical active material particle and includes contributions from both elastic and chemical strain.
+
+The total strain is composed of an elastic strain component and a chemical strain component. The chemical strain (\( \epsilon_{\text{ch}} \)) is expressed according to Clerici \cite{clerici2020}.
+
+\begin{equation}
+    \epsilon_{\text{ch}} = \frac{\Omega}{3} \cdot (C(r) - C(0))
+    \label{Eq. 1}
+\end{equation}
+
+where:
+\begin{itemize}
+    \item \( \Omega \) is the partial molar volume, representing the volume change due to lithium intercalation.
+    \item \( C(r) \) is the lithium concentration field within the particle as a function of radial distance \( r \).
+\end{itemize}
+
+The total strain components in spherical coordinates are then expressed as the sum of elastic and chemical strains. According to the stress-strain relationship, the radial (\( \epsilon_r \)) and tangential (\( \epsilon_\theta \)) strains are given by:
+
+\begin{equation}
+    \epsilon_r = \frac{1}{E \left( \sigma_r - 2 \nu \sigma_\theta \right)} + \frac{\Omega}{3} (C(r, t) - C(0, t))
+    \label{2}
+\end{equation}
+
+\begin{equation}
+    \epsilon_\theta = \frac{1}{E} \left( (1 - \nu) \sigma_\theta - \nu \sigma_r \right) + \frac{\Omega}{3} (C(r, t) - C(0, t))
+    \label{3}
+\end{equation}
+
+where:
+\begin{itemize}
+    \item \( E \) is Young’s modulus.
+    \item \( \nu \) is Poisson’s ratio.
+    \item \( \sigma_r \) and \( \sigma_\theta \) are the radial and tangential stresses, respectively.
+\end{itemize}
+
+According to \cite{clerici2020}, by rearanging Equations (\ref{2}) and (\ref{3}) and solving for the radial stress \( \sigma_r \) and tangential stress \( \sigma_\theta \), we obtain the following expressions:
+
+$$ \sigma_r = \frac{E \left( \epsilon_r - \frac{\Omega (C(r, t) - C(0, t)}{3} \right) (1 - \nu)}{(1 + \nu)(1 - 2 \nu)} + $$
+
+\begin{equation}
+    + \frac{2 \nu E \left( \epsilon_\theta - \frac{\Omega (C(r, t) - C(0, t)}{3} \right)}{(1 + \nu)(1 - 2 \nu)}
+    \label{Eq. 4}
+\end{equation}
+
+$$ \sigma_\theta = \frac{E  \left( \epsilon_\theta - \frac{\Omega (C(r, t) - C(0, t)}{3} \right)}{(1 + \nu)(1 - 2 \nu)} + $$
+
+\begin{equation}
+    + \frac{\nu E \left( \epsilon_r - \frac{\Omega (C(r, t) - C(0, t)}{3} \right) }{(1 + \nu)(1 - 2 \nu)}.
+    \label{Eq. 5}
+\end{equation}
+
+
+In a spherically symmetric system, the mechanical equilibrium condition must be satisfied. This is expressed by the following differential equation for radial stress:
+
+$$ \frac{d ( \sigma_r \cdot 4 \pi r^2)}{dr} = \frac{2}{r} \cdot \sigma_\theta \cdot 4 \pi r^2 \Rightarrow$$
+
+\begin{equation}
+   \Rightarrow \frac{d \sigma_r}{dr} + \frac{2}{r} \left( \sigma_r - \sigma_\theta \right) = 0
+\end{equation}
+
+Because of the spherical symmetry, from \cite{timoshenko1951theory}, the radial and tangential strains can be expressed as functions of radial displacement, $u$, as: 
+
+\begin{equation}
+    \epsilon_r = \frac{d u}{d r}, \epsilon_\theta = \frac{u}{r}
+    \label{Eq. 7}
+\end{equation}
+
+Now, using Equations(\ref{Eq. 7}), and introducing them into  Equations  (\ref{Eq. 4}),  (\ref{Eq. 5}), we get a second order differential equation in terms of \textit{u}. For the case of constant $E_i, \nu_i,$ and $\Omega_i$ ($i = P$ for the active material and $i = S$ for the SEI layer), the solution for such equation is the displacement function:
+
+$$
+    u(r, t) = \left( \frac{1 + \nu_i}{1 - \nu_i} \right) \frac{\Omega_i}{3 r^2} \int_c^r \left( C(r, t) - C(r, 0) \right) r^2 \, dr + 
+$$
+
+\begin{equation}
+    \label{8}
+    + r I_{1i} + \frac{I_{2i}}{r^2}
+\end{equation}
+
+Here, $c$ is the lower integration boundary ($0$ for the Active Material and $R_P$ for the SEI layer) and the constants $I_{1i}$ and $I_{2i}$ are derived from the appropriate boundary conditions. Using Equations(\ref{Eq. 4}), (\ref{Eq. 5}), (\ref{Eq. 7}), and (\ref{8}),and we obtain the following formulas for the tangential and radial stresses:
+
+$$
+    \sigma_r^i(r, t) = -\frac{\Omega_i E_i}{3(1 - \nu_i)} \frac{2}{r^3} \int_c^r \left( C(r, t) - C(r, 0) \right) r^2 \, dr 
+    + 
+$$
+
+
+\begin{equation}
+    + \left[ \frac{E_i I_{1i}}{(1 - 2\nu_i)} - \frac{2 E_i I_{2i}}{(1 + \nu_i) r^3} \right]
+    \label{Eq. 9}
+\end{equation}
+
+$$
+\sigma_\theta^i(r, t) = \frac{\Omega_i E_i}{3(1 - \nu_i)} \frac{1}{r^3} \int_c^r \left( C(r, t) - C(r, 0) \right) r^2 \, dr -
+$$
+
+$$
+  - \frac{\Omega_i E_i \left( C(r, t) - C(r, 0) \right)}{3(1 - \nu_i)} +
+$$
+
+
+\begin{equation}
+    + \left[ \frac{E_i I_{1i}}{(1 - 2\nu_i)} + \frac{E_i I_{2i}}{(1 + \nu_i) r^3} \right]
+    \label{Eq. 10}
+\end{equation}
+
+Note that Equations (\ref{Eq. 9}) and (\ref{Eq. 10}) hold for both the core and the shell regions, with the appropriate constants.\\
+
+\subsubsection{Tangential and Radial Stress in the SEI Layer}
+
+In order for us to obtain the constants $I_{1P}$, $I_{2P}$, $I_{1S}$, and $I_{2S}$, we have to apply the boundary conditions for the two layers of the cell:
+
+\begin{subequations}
+    \begin{equation}
+        \label{11.a}
+        \sigma_r^S (R) = 0
+    \end{equation}
+
+    \begin{equation}
+        \label{11.b}
+        u (0, t) = 0
+    \end{equation}
+
+    \begin{equation}
+        \label{11c}
+        \sigma_r^P \big|_{r = R_P} = \sigma_r^S \big|_{r = R_P}
+    \end{equation}
+
+    \begin{equation}
+        \label{11.d}
+        u_r \big|_{r = R_P} = u_r \big|_{r = R_P}
+    \end{equation}
+\end{subequations}
+
+From Equation (\ref{11.b}), we instantly get that $I_{2P} = 0$ as the displacement has to be finite at $r = 0$.
+
+Let us take $C_{avg}(r)$ the average lithium concentration in the Active Material:
+
+
+\begin{equation}
+     C_{avg}(r) = \frac{3}{r^3} \int_0^r C(x) x^2 \, dx   
+\end{equation}
+
+Therefore the equations for the stress within the Active material become:
+
+$$
+\sigma_r^P(r, t) = -\frac{2 E_P}{3(1 - \nu_P)} \frac{\Omega_P}{3} \left( C_{\text{avg}}(r, t) - C_{\text{avg}}(r, 0) \right) + 
+$$
+
+\begin{equation}
+    \label{13}
+    + \frac{E_P I_{1P}}{(1 - 2 \nu_P)}
+\end{equation}
+
+$$
+ \sigma_\theta^P(r, t) = \frac{E_P}{3(1 - \nu_P)} \frac{\Omega_P}{3} \left( C_{\text{avg}}(r, t) - C_{\text{avg}}(r, 0) \right) +
+$$
+
+\begin{equation}
+    + \frac{E_P I_{1P}}{(1 - 2 \nu_P)}  - \frac{E_P \Omega_P \left( C(r, t) - C(r, 0) \right)}{3(1 - \nu_P)}
+\end{equation}
+
+As the SEI layer acts only as an ionic conductor, we have $\Omega_{S} = 0$ in the $R_P \leq r \leq R$ region. Therefore the equations for the stresses in this region are:
+
+\begin{equation}
+    \label{15}
+    \sigma_r^S(r, t) = \frac{E_S I_{1S}}{(1 - 2 \nu_S)} - \frac{2 E_S I_{2S}}{(1 + \nu_S) r^3}
+\end{equation}
+
+\begin{equation}
+    \label{16}
+    \sigma_\theta^S(r, t) = \frac{E_S I_{1S}}{(1 - 2 \nu_S)} + \frac{E_S I_{2S}}{(1 + \nu_S) r^3} 
+\end{equation}
+
+From equations (\ref{11.a}) and (\ref{16}), we obtain:
+
+\begin{equation}
+    \label{17}
+    I_{1S} = \frac{2 (1 - 2 \nu_S)}{(1 + \nu_S)} \frac{I_{2S}}{R^3}
+\end{equation}
+
+Combining Equations (\ref{15}) and (\ref{17}):
+
+$$
+\sigma_r^S(r) = \left[ \frac{E_S}{(1 - 2 \nu_S)} \frac{2 (1 - 2 \nu_S) I_{2S}}{(1 + \nu_S) R^3} 
+    - \frac{2 E_S I_{2S}}{(1 + \nu_S) r^3} \right]
+$$
+
+\begin{equation}
+    \label{18}
+    \sigma_r^S(r) = \frac{2 E_S I_{2S}}{(1 + \nu_S)} \left( \frac{1}{R^3} - \frac{1}{r^3} \right)
+\end{equation}
+
+Using Equations (\ref{11c}), (\ref{13}), and (\ref{18}), we obtain: 
+
+$$ 
+\frac{2 E_S I_{2S}}{(1 + \nu_S)} \left( \frac{1}{R^3} - \frac{1}{R_P^3} \right) =
+$$
+
+$$
+ = -\frac{2 E_P}{3(1 - \nu_P)} \frac{\Omega_P}{3} \cdot \left( C_{\text{avg}}(R_P, t) - C_{\text{avg}}(R_P, 0) \right) +
+$$
+
+\begin{equation}
+    \label{19}
+   + \frac{E_P I_{1P}}{(1 - 2 \nu_P)}
+\end{equation}
+
+If the thickness of the SEI layer is \( w \), then:
+
+\begin{equation}
+    \label{20}
+    R_P = R - w
+\end{equation}
+
+Plugging Equation (\ref{20}) in Equation (\ref{19}):
+
+$$
+\frac{2 E_S I_{2S}}{(1 + \nu_S)} \left( \frac{(R - w)^3 - R^3}{R^3 (R - w)^3} \right) = 
+$$
+
+$$
+= -\frac{2 E_P}{3(1 - \nu_P)} \frac{\Omega_P}{3} 
+    \left( C_{\text{avg}}(R_P, t) - C_{\text{avg}}(R_P, 0) \right) + 
+$$
+
+\begin{equation}
+    \label{21}
+    + \frac{E_P I_{1P}}{(1 - 2 \nu_P)}
+\end{equation}
+
+Using the fact that $w \ll R_P, R$ and ignoring higher powers of $\frac{w}{R_P}$ in Equation (\ref{21}), we get:
+
+$$
+\frac{2 E_S I_{2S}}{(1 + \nu_S)} \frac{1}{R_P^3} \left( -\frac{3w}{R} \right) =
+$$
+
+$$
+     = -\frac{2 E_P}{3(1 - \nu_P)} \frac{\Omega_P}{3} 
+    \left( C_{\text{avg}}(R_P, t) - C_{\text{avg}}(R_P, 0) \right) +
+$$
+
+$$
+ + \frac{E_P I_{1P}}{(1 - 2 \nu_P)}
+$$
+
+Therefore:
+
+$$
+I_{1P} = -2 \frac{E_S (1 - 2 \nu_S)}{E_P (1 + \nu_S)} \frac{3w}{R} \frac{I_{2S}}{R_P^3}  +
+$$
+
+\begin{equation}
+    \label{22}
+    + \frac{2 \Omega_P (1 - 2 \nu_P)}{9 (1 - \nu_P)} 
+    \left( C_{\text{avg}}(R_P, t) - C_{\text{avg}}(R_P, 0) \right)
+\end{equation}
+
+Now making use of our final boundary condition at $r = R_P$, we combine Equations (\ref{8}), (\ref{11.b}), (\ref{17})
+
+
+$$
+    \left( \frac{1 + \nu_P}{1 - \nu_P} \right) 
+    \frac{\Omega_P}{3 R_P^2} 
+    \int_{0}^{R_P} \left( C(r, t) - C(r, 0) \right) r^2 dr 
+    + R_P I_{1P} =
+$$
+
+$$
+    = R_P I_{1S} + \frac{I_{2S}}{R_P^2}
+$$
+
+And rearranging in order to obtain $I_{1P}$ in terms of $I_{2S}$
+
+$$
+    I_{1P} = -\left( \frac{1 + \nu_P}{1 - \nu_P} \right) 
+    \frac{\Omega_P}{9} \left( C_{\text{avg}}(R_P, t) - C_{\text{avg}}(R_P, 0) \right)+
+$$
+
+\begin{equation}
+    \label{23}
+    + \left( \frac{2 (1 - 2 \nu_S)}{(1 + \nu_S)} 
+    + \frac{R^3}{R_P^3} \right) \frac{I_{2S}}{R^3}
+\end{equation}
+
+Combining the Equations (\ref{22}) and (\ref{23}) we obtain $I_{2S}$
+
+\begin{equation}
+    \label{24}
+    I_{2S} = R_P^3 \frac{\frac{\Omega_P}{3} \left( C_{\text{avg}}(R_P, t) - C_{\text{avg}}(R_P, 0) \right)}
+    {1 + \frac{2 (1 - 2 \nu_S)}{(1 + \nu_S)} \left( 1 - \frac{3w}{R} \right)
+    + \frac{2 E_S (1 - 2 \nu_P)}{E_P (1 + \nu_S)} \frac{3w}{R}}
+\end{equation}
+
+
+Substituting Equation (\ref{24}) into Equations (\ref{17}) and (\ref{22}), we also obtain the expressions for $I_{1S}$ and $I_{1P}$
+
+\begin{equation}
+    \label{25}
+    \textstyle
+    I_{1S} = \frac{2 (1 - 2 \nu_S)}{(1 + \nu_S)} \frac{R_P^3}{R^3}
+    \frac{\frac{\Omega_P}{3} \left( C_{\text{avg}}(R_P, t) - C_{\text{avg}}(R_P, 0) \right)}
+    {1 + 2 \frac{(1 - 2 \nu_S)}{(1 + \nu_S)} \left( 1 - \frac{3w}{R} \right)
+    + \frac{2 E_S (1 - 2 \nu_P)}{E_P (1 + \nu_S)} \frac{3w}{R}}
+\end{equation}
+
+\begin{scriptsize}
+$$
+    I_{1P} = \left( 1 - \frac{E_S (1 - \nu_S)}{E_P} 
+    \frac{1}{(1 - \nu_S) + \frac{2w}{R} \left( \frac{(1 - 2 \nu_P) E_S}{E_P} - (1 - 2 \nu_S) \right)} \frac{3w}{R} \right)
+$$
+\end{scriptsize}
+
+
+\begin{equation}
+    \label{26}
+    \textstyle
+    \cdot \frac{2 (1 - 2 \nu_P)}{3 (1 - \nu_P)} \frac{\Omega_P}{3} 
+    \left( C_{\text{avg}}(R_P, t) - C_{\text{avg}}(R_P, 0) \right)
+\end{equation}
+
+
+
+Now we can finally combine Equations (\ref{24}), (\ref{25}) and obtain the final formmulas for the radial and tangential stresses in the SEI layer:
+
+$$
+ \sigma_r^S(r, t) = 2 \left[ 1 - \frac{R^3}{r^3} \right] \left( 1 - \frac{3w}{R} \right) \cdot 
+$$
+
+\begin{equation}
+    \label{27}
+    \cdot E_S 
+    \frac{\frac{\Omega_P}{3} \left( C_{\text{avg}}(R_P, t) - C_{\text{avg}}(R_P, 0) \right)}
+    { 3(1 - \nu_S) + \left( \frac{E_S (1 - 2 \nu_P)}{E_P} - (1 - 2 \nu_S) \right) \frac{6w}{R}}.
+\end{equation}
+
+$$
+ \sigma_\theta^S(r, t) = E_S \left[ 2 + \frac{R^3}{r^3} \right] \cdot 
+$$
+
+\begin{equation}
+    \label{28}
+    \cdot
+    \frac{\frac{\Omega_P}{3} \left( C_{\text{avg}}(R_P, t) - C_{\text{avg}}(R_P, 0) \right)}
+    {3(1 - \nu_S) + \frac{6w}{R} \left( \frac{(1 - 2 \nu_P) E_S}{E_P} - (1 - 2 \nu_S) \right)}.
+\end{equation} \\
+
+\subsubsection{Effect of Lithiation over the Tangential and Radial Stress}
+
+We define the state-of-lithiation ($SOL$) of a particle as the ratio of average lithium concentration inside the Active Material ($C_{avg}(R_P)$) to the maximum theoretical lithium concentration it can store ($C_{max}^P$):
+
+ \begin{equation}
+    \label{29}
+     SOL = \frac{C_{avg}(R_P)}{C_{max}^P}
+ \end{equation}
+
+We also define the state-of-lithiation variation as the difference between $SOL(t)$ and $SOL(0)$:
+
+\begin{equation}
+    \label{30alpha}
+    \Delta SOL =  \frac{C_{avg}(R_P, t) - C_{avg}(R_P, 0)}{C_{max}^P}
+\end{equation}
+
+We know from Equations (\ref{27}) and (\ref{28}) that:
+
+$$
+\sigma_r^S(r, t), \sigma_\theta^S(r, t) \propto (C_{avg}(R_P, t) - C_{avg}(R_P, 0))
+$$
+
+Therefore:
+
+\begin{equation}
+\label{31.x}
+    \sigma_r^S(r, t), \sigma_\theta^S(r, t) \propto \Delta SOL
+\end{equation}
+
+
+Or, more explicitly, introducing the formula for the state-of-lithiation from Equation (\ref{30alpha} into Equations (\ref{27}) and (\ref{28}), we can write:
+
+$$
+ \sigma_r^S(r, t) = 2 \left[ 1 - \frac{R^3}{r^3} \right] \left( 1 - \frac{3w}{R} \right) \cdot 
+$$
+
+\begin{equation}
+    \label{32.z}
+    \textstyle
+    \cdot E_S 
+    \frac{\frac{\Omega_P}{3} C_{max}^P}
+    { 3(1 - \nu_S) + \left( \frac{E_S (1 - 2 \nu_P)}{E_P} - (1 - 2 \nu_S) \right) \frac{6w}{R}} \cdot \Delta SOL(t)
+\end{equation}
+
+$$
+ \sigma_\theta^S(r, t) = E_S \left[ 2 + \frac{R^3}{r^3} \right] \cdot 
+$$
+
+\begin{equation}
+    \label{33.z}
+     \textstyle
+    \cdot
+    \frac{\frac{\Omega_P}{3} C_{max}^P}
+    {3(1 - \nu_S) + \frac{6w}{R} \left( \frac{(1 - 2 \nu_P) E_S}{E_P} - (1 - 2 \nu_S) \right)} \cdot \Delta SOL(t)
+\end{equation} 
+
+For now, we will use the following notations:
+
+\begin{equation}
+    \label{34.z}
+    A_r \equiv 2  E_S \frac{\left( 1 - \frac{3w}{R} \right) \frac{\Omega_P}{3} C_{max}^P}
+    { 3(1 - \nu_S) + \left( \frac{E_S (1 - 2 \nu_P)}{E_P} - (1 - 2 \nu_S) \right) \frac{6w}{R}} 
+\end{equation}
+
+\begin{equation}
+ \label{35.z}
+    A_\theta \equiv E_S \cdot \frac{\frac{\Omega_P}{3} C_{max}^P}
+    { 3(1 - \nu_S) + \left( \frac{E_S (1 - 2 \nu_P)}{E_P} - (1 - 2 \nu_S) \right) \frac{6w}{R}} 
+\end{equation}
+
+Such that
+
+\begin{equation}
+     \label{36.z}
+    \sigma_r^S(r, t) = A_r \cdot \left( 1 - \frac{1}{x^3}\right) \cdot \Delta SOL(t)
+\end{equation}
+
+\begin{equation}
+     \label{37.z}
+    \sigma_\theta^S(r, t) = A_\theta \cdot \left(2 + \frac{1}{x^3}\right) \cdot \Delta SOL(t)
+\end{equation}
+
+where $x = \frac{r}{R}$.\\
+
+\subsubsection{Evolution of the State-of-lithiation Over Cycling}
+
+In the following analysis, the SEI layer is modeled as a simple ion (or atom) resistor, depending on the region where the charge transfer occurs. We assume no concentration gradient build-up inside the SEI and neglect any mechanical stress-induced diffusion effects for simplicity. As such, the diffusion is described using the Fickian diffusion equation. For the active phase (P-phase) within the region \( 0 \leq r < R_P \), the equation is expressed as:
+
+\begin{equation}
+    \frac{\partial C(r, t)}{\partial t} = \frac{D_P}{r^2} \frac{\partial}{\partial r} \left( r^2 \frac{\partial C(r, t)}{\partial r} \right),
+    \label{eq:diffusion_equation}
+\end{equation}
+
+where \( C(r, t) \) represents the concentration of the solute at time \( t \) and radial position \( r \), and \( D_P \) is the diffusion coefficient of the phase P.
+
+At the interface \( r = R_P \) between the shell and the core, the flux is constant and is determined by the current density \( I \) over the electrode particle. This condition is expressed as follows:
+
+\begin{equation}
+    D_P \frac{\partial C(r, t)}{\partial r} \Big|_{r = R_P} = \frac{I}{F},
+    \label{eq:flux_boundary_condition}
+\end{equation}
+
+where \( F \) is the Faraday constant.
+
+The initial condition, assuming both phases are equilibrated at \( t = 0 \), is given as:
+
+\begin{equation}
+    C(r, 0) = C_{\text{ini}},
+    \label{eq:initial_condition}
+\end{equation}
+
+where \( C_{\text{ini}} \) is the initial concentration of the solute.
+
+Additionally, the solution is assumed to behave smoothly at the center of the particle (\( r = 0 \)), which implies the following boundary condition:
+
+\begin{equation}
+    \frac{\partial C(0, t)}{\partial r} = 0.
+    \label{eq:center_boundary_condition}
+\end{equation}
+
+The system of equations described above has been solved in several prior studies such as \cite{cheng2009nanoparticles} and \cite{carslaw1959conduction}, and analytical solutions are well documented in the literature. The analytical solution is as follows:
+
+$$
+    C(r, t) = C_{\text{ini}} 
+    +\frac{I R_P}{F D_P} \Bigg\{ \tau - \frac{1}{2} x^2 - \frac{3}{10}  -
+$$
+
+\begin{equation}
+ - \frac{2}{x} \sum_{n=1}^\infty \frac{\sin (\lambda_n x)}{\lambda_n^2 \sin (\lambda_n)} e^{-\lambda_n^2 \tau} 
+    \Bigg\},      
+    \label{eq:analytical_solution}
+\end{equation}
+
+
+where \( x = \frac{r}{R_P} \) is the normalized radial position, \( \tau = \frac{t D_P}{R_P^2} \) is the dimensionless time, and \( \lambda_n \) are the roots of the transcendental equation \( \tan(\lambda_n) = \lambda_n \).
+
+Going back to Equation (\ref{29}):
+
+\begin{equation}
+    SOL(t) = \frac{1}{C^{P}_{\text{max}}} \left( \frac{3}{x^3} \int_{0}^{1} C^{P}(x, \tau) x^2 dx \right) 
+    \label{37.x}
+\end{equation}
+
+To evaluate Equation (\ref{37.x}), we substitute the analytical solution for \(C(x, \tau)\) derived in Equation (\ref{eq:analytical_solution}):
+
+$$
+    SOL(t) = \frac{1}{C^{P}_{\text{max}}} \Bigg\{ \frac{3}{x^3} \int_{0}^{1} ( C_{\text{ini}} + \frac{I R_{P}}{F D_{P}} [ 3\tau - \frac{1}{2}x^2 - \frac{3}{10} - 
+$$
+
+\begin{equation}
+    \frac{2}{x} \sum_{n=1}^{\infty} \frac{\sin(\lambda_n x) \, e^{-\lambda_n^2 \tau}}{\lambda_n^2 \sin(\lambda_n)} ] ) x^2 dx \Bigg\} 
+    \label{38.x}
+\end{equation}
+
+Upon integration, Equation (\ref{38.x}) becomes:
+
+$$
+    SOL(t) = \frac{1}{C^{P}_{\text{max}}} \Bigg\{ C_{\text{ini}} + \frac{I R_{P}}{F D_{P}} \left\{ \tau - \frac{1}{10} \left( x^2 - 1 \right) - \frac{2}{x^3} \right\} 
+$$
+
+\begin{equation}
+    + \sum_{n=1}^{\infty} \frac{\sin(\lambda_n x) - \lambda_n x \cos(\lambda_n x)}{\lambda_n^4 \sin(\lambda_n)} e^{-\lambda_n^2 \tau} \Bigg\} \Big|_0^1
+    \label{39.x}
+\end{equation}
+
+And evaluating at the integration limits:
+
+\begin{equation}
+    SOL(t) = \frac{1}{C^{P}_{\text{max}}} \left[ C_{\text{ini}} + 3 \frac{I R_{P}}{F D_{P}} \tau \right] 
+    \label{40.x}
+\end{equation}
+
+Substituting the dimensionless time $\tau$ in terms of the real time $t$ into Equation (\ref{40.x}), we obtain the formula for the dependence of the state-of-lithiation on time:
+
+\begin{equation}
+    SOL(t) = \frac{C_{ini}}{C_{max}^P} + \frac{1}{C^{P}_{\text{max}}} \left( \frac{3 I}{F R_{P}} t \right)
+\end{equation}
+
+And therefore:
+
+\begin{equation}
+    \label{42.x}
+    \Delta SOL(t) = \frac{1}{C^{P}_{\text{max}}} \cdot \frac{3 I}{F R_{P}} t
+\end{equation}
+
+We will also define 
+
+$$\Delta SOL_{amp} = max (\Delta SOL)$$
+
+as the amplitude of the state-of-lithiation swing over the cycles.
+
+From Equation (\ref{42.x}), we can look at the graph of $\Delta SOL$ over a few cycles:\\
+
+\begin{tikzpicture}
+\begin{axis}[
+    xlabel={Cycle},
+    ylabel={$\Delta SOL$ (\%)},
+    legend pos=north east,
+    grid=both
+]
+
+\addplot[color=black, thick] coordinates {
+    (0, 0)
+    (0.5, 25)
+    (1, 0)
+    (1.5, 25)
+    (2, 0)
+    (2.5, 25)
+    (3, 0)
+};
+\addlegendentry{$\Delta SOL_{\text{amp}}=25\%$}
+
+\addplot[color=red, thick] coordinates {
+    (0, 0)
+    (0.5, 50)
+    (1, 0)
+    (1.5, 50)
+    (2, 0)
+    (2.5, 50)
+    (3, 0)
+};
+\addlegendentry{$\Delta SOL_{\text{amp}}=50\%$}
+
+\addplot[color=blue, thick] coordinates {
+    (0, 0)
+    (0.5, 90)
+    (1, 0)
+    (1.5, 90)
+    (2, 0)
+    (2.5, 90)
+    (3, 0)
+};
+\addlegendentry{$\Delta SOL_{\text{amp}}=90\%$}
+
+\end{axis}
+\end{tikzpicture}
+
+Note that we do not consider any change in the state-of-lithiation amplitude over the first few cycles as it can be neglected for small number of cycles.\\
+
+\subsubsection{Strain Energy of SEI Layer Cracking}
+
+The strain energy density \( e(r) \) represents the elastic energy stored per unit volume in a material as a result of deformation. For an isotropic linear elastic material, the strain energy density can be derived as follows.
+
+From general literature such as \cite{solidmechanics}, the strain energy density \( e(r) \) is given by:
+\begin{equation}
+e = \frac{1}{2} \sigma_{ij} \epsilon_{ij}
+\label{eq:strain_energy_density}
+\end{equation}
+where \( \sigma_{ij} \) is the stress tensor and \( \epsilon_{ij} \) is the strain tensor. 
+
+For isotropic linear elastic materials, the stress-strain relationship is expressed using Hooke’s law:
+\begin{equation}
+\sigma_{ij} = 2 G \epsilon_{ij} + \lambda \delta_{ij} \epsilon_{kk}
+\label{eq:hookes_law}
+\end{equation}
+where:
+\begin{itemize}
+    \item \( G \) is the shear modulus,
+    \item \( \lambda \) is Lamé’s first parameter,
+    \item \( \delta_{ij} \) is the Kronecker delta,
+    \item \( \epsilon_{kk} \) is the trace of the strain tensor.
+\end{itemize}
+
+Substituting Equation (\ref{eq:hookes_law}) into Equation (\ref{eq:strain_energy_density}):
+\begin{align}
+e &= \frac{1}{2} \left( 2 G \epsilon_{ij} \epsilon_{ij} + \lambda \delta_{ij} \epsilon_{kk} \epsilon_{ij} \right) \label{eq:strain_energy_density_expanded}
+\end{align}
+
+For a spherically symmetric system, we have the following simplifications:
+\begin{itemize}
+    \item The term \( \delta_{ij} \epsilon_{kk} \epsilon_{ij} \) simplifies to:
+   \[
+   \delta_{ij} \epsilon_{kk} \epsilon_{ij} = \epsilon_{kk} \epsilon_{ii} = \mathrm{tr}(\epsilon) = \epsilon_r + 2 \epsilon_\theta
+   \]
+    \item The term \( \epsilon_{ij} \epsilon_{ij} \) is the second invariant of the strain tensor:
+   \[
+   \epsilon_{ij} \epsilon_{ij} = \mathrm{tr}(\epsilon^2) = \epsilon_r^2 + 2 \epsilon_\theta^2
+   \]
+     \item \( G = \frac{E}{2(1 + \nu)} \) 
+    \item \( \lambda = \frac{\nu E}{(1 + \nu)(1 - 2\nu)} \) 
+\end{itemize}
+
+Substitute these into Equation (\ref{eq:strain_energy_density_expanded}):
+
+$$
+e(r) = \frac{E}{2(1 + \nu)} \left( \epsilon_r^2 + 2 \epsilon_\theta^2 \right) +
+$$
+
+\begin{equation}
++ \frac{\nu E}{2(1 + \nu)(1 - 2\nu)} \left( \epsilon_r + 2 \epsilon_\theta \right)^2
+    \label{32}
+\end{equation}
+
+Taking Equations (\ref{2}) and (\ref{3}) and substituting them into the strain energy density expression form Equation (\ref{32}), we obtain the following formula for the energy density in terms of the radial and tangential stress:
+
+\begin{equation}
+e(r) = \frac{1}{2E} \left( \sigma_r^2 + 2 \sigma_\theta^2 \right) - \frac{\nu}{E} \sigma_r \sigma_\theta.
+\end{equation}
+
+The total strain energy can be obtained by integrating this over the whole volume of the particle:
+
+\begin{equation}
+    \Pi_{total} = 4\pi \int_{0}^{R} e(r) r^2 \, dr
+\end{equation}
+
+While the strain energy in the SEI layer is:
+
+$$
+    \Pi_{S} = 4\pi \int_{R_P}^{R} e(r) r^2 \, dr = 
+$$
+
+\begin{equation}
+    \label{38}
+    = 4 \pi \int_{R_P}^{R} \left[ \frac{1}{2E_S} \left( {\sigma_r^S}^2 + 2 {\sigma_\theta^S}^2 \right) - \frac{\nu_S}{E_S} \sigma_r^S \sigma_\theta^S\right] r^2 \, dr
+\end{equation}
+
+Substituting $\sigma_r^S(r, t)$ and $\sigma_r^\theta(r, t)$ from Equations (\ref{36.z}) and (\ref{37.z}) into Equation (\ref{38}), we obtain:
+
+\begin{footnotesize}
+$$
+\Pi_S = 4 \pi \frac{(\Delta SOL)^2}{E_S R^3} \cdot \int_{x_P}^{1} \Bigg\{ \frac{1}{2} \left( A_r^2 \left( 1 - \frac{1}{x^3}\right)^2 + 2A_\theta^2 \left(2 +\frac{1}{x^3}\right)^2 \right) -   
+$$
+\end{footnotesize}
+
+\begin{equation}
+    \label{56.z}
+    \textstyle
+    - \nu_S A_r A_\theta \left( 1 - \frac{1}{x^3}\right)\left(2 +\frac{1}{x^3}\right) \Bigg\} x^2 dx
+\end{equation}
+
+where $x_P = \frac{R_P}{R}$. \\
+
+Upon integration we obtain the following expression of $\Pi_S$ in terms of $\Delta SOL(t)$ and the cell's parameters: \\
+
+\begin{small}    
+$$
+\Pi_S = 4 \pi \frac{(\Delta SOL)^2}{E_S R^3} \Bigg\{\left(\frac{A_r^2}{2} + 4A_\theta^2 - 2 \nu_S A_rA_\theta \right) \frac{1 - x_P^3}{3} +    
+$$
+\end{small}
+
+\begin{equation}
+    \label{57.z}
+    \textstyle
+    + \left( - A_r^2 + 4 A_\theta^2 + \nu_S A_r A_\theta \right) ln(\frac{1}{x_P}) + \left( \frac{A_r^2}{2} + A_\theta^2 + \nu_S A_r A_\theta \right) \frac{1 - x_P ^3}{3 x_P^3} \Bigg\}
+\end{equation}
+
+
+Using the fact that $1 - x_P = \frac{w}{R} \ll 1$, we have that:
+
+$$\frac{1 - x_P^3}{3} \approx ln(\frac{1}{x_P}) \approx \frac{1 - x_P ^3}{3 x_P^3} \approx 1$$
+
+and by introducing this in Equation (\ref{57.z}), we get the much simpler form:
+
+$$
+ \Pi_S = 4 \pi \frac{(\Delta SOL)^2}{E_S R^3} \cdot 9 A_\theta^2 \cdot \frac{w}{R} \Rightarrow
+$$
+
+\begin{equation}
+    \label{58.z}
+    \Rightarrow \Pi_S = \frac{36 \pi A_\theta^2 w}{E_S R^4} (\Delta SOL)^2 
+\end{equation}
+
+Notice that this is the same result we would've obtained by neglecting the contribution of radial stress energy to the cracking process. The dominance of the tangential stress energy contribution ndicates that most of the elastic energy driving SEI layer cracking resides in the tangential stress field. 
+
+From \cite{cheng2011diffusion_stresses}, at the formation of cracks in the SEI layer, we have that:
+
+\begin{equation}
+\label{40}
+\Pi_S = \gamma \cdot A_{new}
+\end{equation}
+
+And therefore:
+
+\begin{equation}
+    \label{60.zz}
+    A_{new} = \frac{36 \pi A_\theta^2 w}{\gamma E_S R^4} (\Delta SOL)^2 
+\end{equation}
+
+where:
+\begin{itemize}
+    \item $\gamma$ is surface energy
+    \item $A_{new}$ is the fromed area of cracked SEI surface
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.4\textwidth]{images/new_area.png}
+    \caption{Illustration of SEI Crack and the new formed area.}
+    \label{fig:area}
+\end{figure}
+
+For a crack of length $l_i$ the new are is:
+
+$$A_{new, i} = 2 \cdot l_i \cdot w$$
+
+And the total new area formed is:
+
+\begin{equation}
+    \label{41}
+    A_{new} = \sum_i A_{new, i} = 2 \cdot w \cdot \sum_i l_i
+\end{equation}
+
+Combining Equations  (\ref{58.z}), (\ref{40}), and (\ref{41}), we obtain that:
+
+\begin{equation}
+    \label{42}
+    l_{crack}^{total} = \sum_i l_i =  \frac{18 \pi A_\theta^2}{\gamma E_S R^4} (\Delta SOL)^2
+\end{equation}
+
+
+\subsubsection{Capacity Loss due to Cracking Over One Lithiation Cycle} 
+
+In order to explicitly analyze the capacity loss due to cracking, we will rely on the following assumptions:
+
+\begin{itemize}
+    \item SEI cracking and reformation are the primary mechanisms of capacity loss at low cycling rates, with no significant cracking or pulverization of the Active Material.
+    \item The rate of SEI reformation depends only on the exposed Active Material surface area with negligible influence from reaction composition or potential.
+    \item All cracks form with relatively equal width $d$ and their formation is independent.
+\end{itemize}
+
+As we supposed that all cracks have width $d$, the exposed Active Material surface area is:
+
+\begin{equation}
+    \label{43}
+    A_{new}^P = l_{crack}^{total} \cdot d 
+\end{equation}
+
+From our assumption and from \cite{griffith_theory} we know that:
+
+\begin{equation}
+    \label{44}
+    Q_{loss} \propto A_{new}^P
+\end{equation}
+
+Combining this with Equation (\ref{43}), we get that:
+
+$$
+    Q_{loss} \propto l_{crack}^{total} =  \frac{18 \pi A_\theta^2}{\gamma E_S R^4} (\Delta SOL)^2\Rightarrow
+$$
+
+\begin{equation}
+    \label{45}
+    \Rightarrow Q_{loss} = a \cdot (\Delta SOL)^2
+\end{equation}
+
+In Equation (\ref{45}) the proportionality constant $a$ is a function of a large variety of parameters such as temperature, the number of lithium atoms involved in the reaction, the mechanical properties of SEI material as well as the electrode material, radius of particle, and diffusion properties of lithium in the Active Material etc. But, form our modeling, we also know that:
+
+\begin{equation}
+    \label{66.z}
+    a \propto \frac{18 \pi A_\theta^2}{\gamma E_S R^4} \equiv a'
+\end{equation}\\
+
+
+\subsubsection{Evolution of Capacity over Multiple Cycles} 
+
+Here we derive an expression for capacity loss when a cell is cycled between $V_{max}$ and $V_{min}$ at constant rate and current operation. In order for us to visualize what happens over $n$ cycles, we will define the $Q_n$ to be the cell capacity after $n$ cycles and $Q_{loss, n}$ the capacity loss during the $n$-th cycle. During one cycle, from Equation (\ref{45}), $Q_{loss, n}$ is proportional to the square of the amplitude of $\Delta SOL$, as the peak-to-peak swing in the state-of-lithiation in the cell imposes the greatest stress on the SEI layer.
+
+We know that:
+
+\begin{equation}
+    \label{57.xx}
+    Q_n - Q_{n+1} = Q_{loss, n+1} = a \cdot (\Delta SOL_{amp, n+1})^2
+\end{equation}
+
+where $\Delta SOL_{amp, n}$ is the amplitude of the state-of-lithiation swing during the $n$-th cycle.
+
+Summing Equation (\ref{57.xx}) over the first n cycles we obtain:
+
+$$
+Q_n = Q_0 - a (\Delta SOL_{amp, 1})^2 - ... - a (\Delta SOL_{amp,n})^2 \Rightarrow
+$$
+
+\begin{equation}
+    \label{58.xx}
+    \Rightarrow
+    Q_n = Q_0 - a \cdot \sum_{i = 1}^n (\Delta SOL_{amp, i})^2
+\end{equation}
+
+We assume that during any $n$-th cycle, the negative electrode is lithiated based on the previous cycle's capacity ($Q_{n-1}$). Consequently, the state-of-lithiation swing ($\Delta SOL_{\text{amp}, n}$) during the $n$-th cycle is related to the capacity available after $(n-1)$ cycles. 
+
+\begin{equation}
+    \label{59.xx}  
+    \Delta SOL_{amp,n} = \frac{q_{amp, n}}{q_{max}}
+\end{equation}
+
+where 
+
+\begin{itemize}
+    \item $q_{amp, n}$ = $\int I dt$ = the amplitude of the charge on the cell when the cell is charged form $V_{min}$ to $V_{max}$
+    \item $q_{max}$ =  the maximum charge that the cell can theoretically host
+\end{itemize}
+
+
+Assuming the state-of-charge (SOC) vs. open circuit voltage (OCV) relationship of a cell doesn't change significantly, the cell charge capacity between $V_\text{min}$ and $V_\text{max}$ decreases proportionally to the overall cell capacity fade during cycling. Thus, we have:
+
+\begin{equation}
+    \label{57.x}
+    q_{amp, n} \propto Q_{n-1},
+\end{equation}
+
+or equivalently:
+\begin{equation}
+    \label{57.y}
+    q_{amp, n} = \alpha Q_{n-1},
+\end{equation}
+where $\alpha$ is a positive constant.
+
+Given there is no loss of Active Material during slow cycling, the theoretical charge capacity $q_{max}$ remains constant. Combining Equations (\ref{57.x}) and (\ref{57.y}), we find:
+
+\begin{equation}
+    \Delta SOL_{\text{amp}, n} = \frac{\alpha \cdot Q_{n-1}}{q_{max}},
+\end{equation}
+
+or
+
+\begin{equation}
+    \label{63.y}
+    \Delta SOL_{\text{amp}, n} = k Q_{n-1},
+\end{equation}
+
+where $k = \frac{\alpha}{q_{max}}$ is independent of the battery's parameters for a constant SOC-OCV curve.
+
+Finally, combining Equation (\ref{57.xx}) with Equation (\ref{63.y}), we obtain:
+
+$$
+     Q_{n-1} - Q_n = a \cdot (k \cdot Q_{n-1})^2.
+$$
+
+\begin{equation}
+    \label{64.y}
+    Q_{n} = Q_{n-1} - a k^2 \cdot Q_{n-1}^2.
+\end{equation}
+
+Rearanging we obtain:
+
+\begin{equation}
+    \label{65.y}
+    \frac{Q_{n}}{Q_0}  - \frac{Q_{n+1}}{Q_0} = - a k^2 Q_0 \cdot (\frac{Q_{n-1}}{Q_0})^2.
+\end{equation}
+
+Let us define the function $f$ such that $f(n) = \frac{Q_n}{Q_0}$. The conditions for $f$ are:
+
+\begin{subequations}
+    \begin{equation}
+        \label{66.a}
+        f(0) = 1
+    \end{equation}
+
+    \begin{equation}
+        \label{66.b}
+        f(n) - f(n - 1) = a k^2 Q_0 \cdot f(n-1)^2
+    \end{equation}
+\end{subequations}
+
+Given that the differences in capacity between consecutive cycles are relatively small for the batteries under consideration, we can safely assume that $a k^2 Q_0 \ll 1$. Therefore the function $f$ can be taken as linear over a cycle:
+
+\begin{equation}
+\label{67}
+f(n + 1) - f(n) \approx f'(n)
+\end{equation}
+
+Combining Equations (\ref{66.b}) and (\ref{67}), we obtain the following differential equation:
+
+$$
+f'(n) = - a k ^2 Q_0 \cdot f(n)^2 \Rightarrow
+$$
+
+$$
+\Rightarrow -(\frac{1}{f(n)})' = - a k^2 Q_0 \Rightarrow \frac{1}{f(n)} - \frac{1}{f(0)} = a k^2 Q_0 \cdot n \Rightarrow
+$$
+
+\begin{equation}
+    \label{68}
+    \Rightarrow f(n) = \frac{1}{1 + a k^2 Q_0 \cdot n}
+\end{equation}
+
+So the capacity after $n$ cycles is very well approximated by:
+
+\begin{equation}
+    \label{69}
+    Q_n = \frac{Q_0}{1 + a k^2 Q_0 \cdot n}
+\end{equation}
+
+For a clearer image of this evolution, below is provided the graph of $f(n) = \frac{Q_n}{Q_0}$ for different values of $ak^2 Q_0$:\\
+
+\begin{tikzpicture}
+    \hspace*{-2em}
+    \begin{axis}[
+        xlabel={\( n \) (Cycle Number)},
+        ylabel={\( f(n) = \frac{Q_n}{Q_0} \) (Relative Capacity)},
+        grid=both,
+        legend style={font=\footnotesize, at={(0.5,-0.2)}, column sep=2pt, anchor=north, legend columns=-1},
+        xmin=-50, xmax=1000, 
+        ymin=0, ymax=1,
+        axis line style={thick},
+        tick style={semithick},
+    ]
+        \addplot[
+            only marks, 
+            mark=*, 
+            mark size=1pt, 
+            color=red, 
+            samples=50,
+            domain=0:1000
+        ] 
+        {1/(1 + 0.0001 * x)};
+        \addlegendentry{\( ak^2Q_0 = 0.0001 \) }
+
+        \addplot[
+            only marks, 
+            mark=*, 
+            mark size=1pt, 
+            color=orange, 
+            samples=50,
+            domain=0:1000
+        ] 
+        {1/(1 + 0.001 * x)};
+        \addlegendentry{\( ak^2Q_0 = 0.001 \) }
+
+        \addplot[
+            only marks, 
+            mark=*, 
+            mark size=1pt, 
+            color=green, 
+            samples=50,
+            domain=0:1000
+        ] 
+        {1/(1 + 0.005 * x)};
+        \addlegendentry{\( ak^2Q_0=0.005 \) }
+
+        \addplot[
+            only marks, 
+            mark=*, 
+            mark size=1pt, 
+            color=blue, 
+            samples=50,
+            domain=0:1000
+        ] 
+        {1/(1 + 0.01 * x)};
+        \addlegendentry{\( ak^2Q_0=0.01 \) }
+    \end{axis}
+
+\end{tikzpicture}
+
+The graph above indicates that for lower values of \( ak^2Q_0 \), such as 0.0001 (red curve), the capacity degradation is gradual, indicating better stability over extended cycling. In contrast, higher values of \( ak^2Q_0 \), such as 0.01 (blue curve), result in rapid capacity loss, emphasizing the significant influence of this parameter on battery performance. These trends highlight the importance of optimizing mechanical and electrochemical factors to minimize \( ak^2Q_0 \) and improve cycle life. 
+
+\vspace{2mm}
+
+\subsection{Analysis of Materials}
+
+\vspace{2mm}
+
+Lithium-ion batteries utilize a variety of electrode materials, each tailored to specific applications based on their electrochemical and mechanical properties. In this section, we analyzed a variety of materials in the context of the proposed SEI fracture model. The materials we focus on are:
+
+\begin{itemize}
+    \item \textbf{Graphite (Anode Material):} The most commonly used anode material in commercial lithium-ion batteries. Graphite is widely applied in portable electronics and electric vehicles \cite{dahn1995graphite}.
+
+    \item \textbf{Lithium Manganese Oxide (LMO, Cathode Material):} A cathode material known for its thermal stability, safety, and affordability.  \cite{thackeray1983lmo}.
+
+    \item \textbf{Silicon (Anode Material):} A high-capacity anode material gaining attention for its potential to significantly increase energy density. \cite{xu2018silicon}.
+
+    \item \textbf{Lithium Iron Phosphate (LFP, Cathode Material):} Renowned for its stability and safety, LFP is used in applications requiring long cycle life \cite{padhi1997lfp}.
+
+    \item \textbf{Nickel-Rich NMC (Cathode Material):} A high-energy-density cathode material, such as NMC811, used primarily in electric vehicles.  \cite{li2019nmc}.
+\end{itemize}
+
+In this analysis, the focus is on the SEI layer material primarily formed of lithium carbonate (\textbf{Li$_2$CO$_3$}), as it is a common and well-characterized constituent of the SEI across these systems. 
+
+\begin{table}[H]
+\centering
+\small
+\caption{Material Properties for SEI Layer Analysis.}
+\begin{tabular}{@{}lp{2.5cm}l@{}}
+\toprule
+\textbf{Active Material} & \textbf{SEI Layer Material} & \textbf{Cycling Rate} \\ 
+\midrule
+Graphite \cite{dahn1995graphite} & $Li_2CO_3$  & 0.5 C \\
+LMO \cite{thackeray1983lmo} & $Li_2CO_3$ & 1 C \\
+Silicon \cite{xu2018silicon} & $Li_2CO_3$  & 0.1 C \\
+LFP \cite{padhi1997lfp} & $Li_2CO_3$  & 2 C \\
+NMC \cite{li2019nmc} & $Li_2CO_3$ & 0.5 C \\
+\bottomrule
+\end{tabular}
+\label{tab:material_properties_clean}
+\end{table}
+
+Where cycling rate, expressed in $C$, refers to the charge or discharge rate of the battery relative to its maximum capacity. (\textit{1C = 1 charge/discharge / hour})
+
+\begin{table}[H]
+\centering
+\small 
+\caption{Properties of \( \text{Li}_2\text{CO}_3 \) SEI Layer Material.}
+\begin{tabular}{@{}lp{4cm}l@{}}
+\toprule
+\textbf{Parameter} & \textbf{Description} & \textbf{Value} \\ 
+\midrule
+$\rho_S$ & Density of \( \text{Li}_2\text{CO}_3 \) SEI layer & \( 2.11 \, \text{g/cm}^3\) \cite{shang2012lattice}\\
+$E_S$ & Young’s Modulus of \( \text{Li}_2\text{CO}_3 \) & \( 6.6 \times 10^{10} \, \text{Nm}^{-2} \)\cite{shang2012lattice} \\
+$\nu_S$ & Poisson’s Ratio for SEI layer & \( 0.3 \)\cite{shang2012lattice} \\
+$w$ & Thickness of SEI layer & \( 50 \times 10^{-9} m \)\cite{shang2012lattice} \\
+$\gamma$ & Surface Energy of SEI layer & \( 1.5 J/m^2\)\cite{springer_gamma_li2co3} \\
+\bottomrule
+\end{tabular}
+\label{tab:Li2CO3}
+\end{table}
+
+\subsubsection{Graphite - Anode Material}
+
+We have the following parameters:
+
+\vspace{2mm}
+
+\begin{table}[H]
+\centering
+\small
+\caption{Properties of Graphite Anode Material.}
+\begin{tabular}{@{}lp{3cm}l@{}}
+\toprule
+\textbf{Parameter} & \textbf{Description} & \textbf{Value} \\ 
+\midrule
+\( \Omega_P \) & Partial molar volume of lithium & \( 3.42 \times 10^{-6} \, \text{m}^3/\text{mol} \) \cite{cheng2011diffusion_stresses} \\
+\( C_P^{\text{max}} \) & Maximum lithium concentration & \( 3.18 \times 10^4 \, \text{mol/m}^3 \) \cite{cheng2011diffusion_stresses} \\
+\( E_P \) & Young's modulus& \( 1.5 \times 10^{10} \, \text{N/m}^2 \) \cite{dahn1995graphite} \\
+\( \nu_P \) & Poisson's ratio& \( 0.3\) \cite{dahn1995graphite} \\
+\( \rho_P \) & Density & \( 2.11 \, \text{g/cm}^3 \) \cite{dahn1995graphite} \\
+\( R \) & Radius of particles & \( 5 \times 10^{-6} \, \text{m} \) \cite{cheng2011diffusion_stresses} \\
+\( q_0 \) & Initial capacity per gram & \( 330 \, \text{mAh/g} \) \cite{dahn1995graphite} \\
+\bottomrule
+\end{tabular}
+\label{tab:graphite_properties_cited}
+\end{table}
+
+\vspace{2mm}
+
+\renewcommand{\arraystretch}{3} 
+\begin{table}[H]
+\centering
+\small
+\caption{Calculated Parameters for Graphite Anode Material.}
+\begin{tabular}{@{}lp{4.2cm}l@{}}
+\toprule
+\textbf{Parameter} & \textbf{Formula/Description} & \textbf{Value} \\ 
+\midrule
+\( Q_0 \) & \( q_0 \cdot \rho_P \cdot \frac{4}{3} \pi R^3 \) & \( 3.65 \times 10^{-10} \, \text{Ah} \) \\
+\( A_\theta \) & \( \frac{E_S \frac{\Omega_P}{3} C_{max}^P}
+    { 3(1 - \nu_S) + \left( \frac{E_S (1 - 2 \nu_P)}{E_P} - (1 - 2 \nu_S) \right) \frac{6w}{R}}  \) & $1.1 \times 10^{9} N/m^2$ \\
+\( a' \) & \( \frac{18 \pi A_\theta^2}{\gamma E_S R^4} \) & $1.11 \times 10^{30} 1/m^5$ \\
+\( a' Q_0 \) & \( a' \cdot Q_0 \) & $4.03 \times 10^{20} Ah/m^5$ \\
+\bottomrule
+\end{tabular}
+\label{tab:calculated_graphite_params}
+\end{table}
+
+\vspace{2mm}
+
+\subsubsection{Lithium Manganese Oxide (LMO) - Cathode Material}
+
+We have the following parameters:
+
+\vspace{2mm}
+
+\renewcommand{\arraystretch}{1} 
+\begin{table}[H]
+\centering
+\small
+\caption{Properties of LMO Cathode Material.}
+\begin{tabular}{@{}lp{3cm}l@{}}
+\toprule
+\textbf{Parameter} & \textbf{Description} & \textbf{Value} \\ 
+\midrule
+\( \Omega_P \) & Partial molar volume of lithium & \( 2.4 \times 10^{-6} \, \text{m}^3/\text{mol} \) \cite{thackeray1983lmo} \\
+\( C_P^{\text{max}} \) & Maximum lithium concentration & \( 2.9 \times 10^4 \, \text{mol/m}^3 \) \cite{thackeray1983lmo} \\
+\( E_P \) & Young's modulus& \( 6.5 \times 10^{10} \, \text{N/m}^2 \) \cite{thackeray1983lmo} \\
+\( \nu_P \) & Poisson's ratio& \( 0.3\) \cite{thackeray1983lmo} \\
+\( \rho_P \) & Density & \( 4.3 \, \text{g/cm}^3 \) \cite{thackeray1983lmo} \\
+\( R \) & Radius of particles & \( 5 \times 10^{-6} \, \text{m} \) \cite{thackeray1983lmo} \\
+\( q_0 \) & Initial capacity per gram & \( 100 \, \text{mAh/g} \) \cite{thackeray1983lmo} \\
+\bottomrule
+\end{tabular}
+\label{tab:lmo_properties_cited}
+\end{table}
+
+
+\renewcommand{\arraystretch}{3} 
+\begin{table}[H]
+\centering
+\small
+\caption{Calculated Parameters for LMO Cathode Material.}
+\begin{tabular}{@{}lp{4.2cm}l@{}}
+\toprule
+\textbf{Parameter} & \textbf{Formula/Description} & \textbf{Value} \\ 
+\midrule
+\( Q_0 \) & \( q_0 \cdot \rho_P \cdot \frac{4}{3} \pi R^3 \) & $2.25 \times 10^{-10} Ah$ \\
+\( A_\theta \) & \( \frac{E_S \frac{\Omega_P}{3} C_{max}^P}
+    { 3(1 - \nu_S) + \left( \frac{E_S (1 - 2 \nu_P)}{E_P} - (1 - 2 \nu_S) \right) \frac{6w}{R}}  \) & $7,29 \times 10^8 N/m^2$ \\
+\( a' \) & \( \frac{18 \pi A_\theta^2}{\gamma E_S R^4} \) & $4.86 \times 10^{29} 1/m^5$ \\
+\( a' Q_0 \) & \( a' \cdot Q_0 \) & $1.09 \times 10^{20}$ \\
+\bottomrule
+\end{tabular}
+\label{tab:calculated_lmo_params}
+\end{table}
+
+\vspace{2mm}
+
+\subsubsection{Silicon - Anode Material}
+
+We have the following parameters:
+
+\vspace{2mm}
+
+\renewcommand{\arraystretch}{1} 
+\begin{table}[H]
+\centering
+\small
+\caption{Properties of Silicon Anode Material.}
+\begin{tabular}{@{}lp{3cm}l@{}}
+\toprule
+\textbf{Parameter} & \textbf{Description} & \textbf{Value} \\ 
+\midrule
+\( \Omega_P \) & Partial molar volume of lithium & \( 1.21 \times 10^{-6} \, \text{m}^3/\text{mol} \) \cite{xu2018silicon} \\
+\( C_P^{\text{max}} \) & Maximum lithium concentration & \( 4.2 \times 10^4 \, \text{mol/m}^3 \) \cite{xu2018silicon} \\
+\( E_P \) & Young's modulus& \( 1.6 \times 10^{11} \, \text{N/m}^2 \) \cite{xu2018silicon} \\
+\( \nu_P \) & Poisson's ratio& \( 0.28\) \cite{xu2018silicon} \\
+\( \rho_P \) & Density & \( 2.33 \, \text{g/cm}^3 \) \cite{xu2018silicon} \\
+\( R \) & Radius of particles & \( 1 \times 10^{-6} \, \text{m} \) \cite{xu2018silicon} \\
+\( q_0 \) & Initial capacity per gram & \( 3500 \, \text{mAh/g} \) \cite{xu2018silicon} \\
+\bottomrule
+\end{tabular}
+\label{tab:silicon_properties_cited}
+\end{table}
+
+\renewcommand{\arraystretch}{3} 
+\begin{table}[H]
+\centering
+\small
+\caption{Calculated Parameters for Silicon Anode Material.}
+\begin{tabular}{@{}lp{4.2cm}l@{}}
+\toprule
+\textbf{Parameter} & \textbf{Formula/Description} & \textbf{Value} \\ 
+\midrule
+\( Q_0 \) & \( q_0 \cdot \rho_P \cdot \frac{4}{3} \pi R^3 \) & $3.42 \times 10^{-11}$ \\
+\( A_\theta \) & \( \frac{E_S \frac{\Omega_P}{3} C_{max}^P}
+    { 3(1 - \nu_S) + \left( \frac{E_S (1 - 2 \nu_P)}{E_P} - (1 - 2 \nu_S) \right) \frac{6w}{R}}  \) & $5.54 \times 10^{8} N/m^2$ \\
+\( a' \) & \( \frac{18 \pi A_\theta^2}{\gamma E_S R^4} \) & $1.75 \times 10^{32}$ \\
+\( a' Q_0 \) & \( a' \cdot Q_0 \) & $6.00 \times 10^{21}$ \\
+\bottomrule
+\end{tabular}
+\label{tab:calculated_silicon_params}
+\end{table}
+
+\clearpage
+
+\subsubsection{Lithium Iron Phosphate (LFP) - Cathode Material}
+
+We have the following parameters:
+
+\vspace{2mm}
+
+\renewcommand{\arraystretch}{1} 
+\begin{table}[H]
+\centering
+\small
+\caption{Properties of LFP Cathode Material.}
+\begin{tabular}{@{}lp{3cm}l@{}}
+\toprule
+\textbf{Parameter} & \textbf{Description} & \textbf{Value} \\ 
+\midrule
+\( \Omega_P \) & Partial molar volume of lithium & \( 1.44 \times 10^{-6} \, \text{m}^3/\text{mol} \) \cite{padhi1997lfp} \\
+\( C_P^{\text{max}} \) & Maximum lithium concentration & \( 2.9 \times 10^4 \, \text{mol/m}^3 \) \cite{padhi1997lfp} \\
+\( E_P \) & Young's modulus& \( 1.0 \times 10^{11} \, \text{N/m}^2 \) \cite{padhi1997lfp} \\
+\( \nu_P \) & Poisson's ratio& \( 0.3\) \cite{padhi1997lfp} \\
+\( \rho_P \) & Density & \( 3.6 \, \text{g/cm}^3 \) \cite{padhi1997lfp} \\
+\( R \) & Radius of particles & \( 3 \times 10^{-6} \, \text{m} \) \cite{padhi1997lfp} \\
+\( q_0 \) & Initial capacity per gram & \( 160 \, \text{mAh/g} \) \cite{padhi1997lfp} \\
+\bottomrule
+\end{tabular}
+\label{tab:lfp_properties_cited}
+\end{table}
+
+\vspace{2mm}
+
+\renewcommand{\arraystretch}{3} 
+\begin{table}[H]
+\centering
+\small
+\caption{Calculated Parameters for LFP Cathode Material.}
+\begin{tabular}{@{}lp{4.2cm}l@{}}
+\toprule
+\textbf{Parameter} & \textbf{Formula/Description} & \textbf{Value} \\ 
+\midrule
+\( Q_0 \) & \( q_0 \cdot \rho_P \cdot \frac{4}{3} \pi R^3 \) & $6.51 \times 10^{-11} Ah$ \\
+\( A_\theta \) & \( \frac{E_S \frac{\Omega_P}{3} C_{max}^P}
+    { 3(1 - \nu_S) + \left( \frac{E_S (1 - 2 \nu_P)}{E_P} - (1 - 2 \nu_S) \right) \frac{6w}{R}}  \) & $4.79 \times 10^8 N/m^2$ \\
+\( a' \) & \( \frac{18 \pi A_\theta^2}{\gamma E_S R^4} \) & $1.38 \times 10^{30} 1/m^5$ \\
+\( a' Q_0 \) & \( a' \cdot Q_0 \) & $8.98 \times 10^{19} Ah/m^5$ \\
+\bottomrule
+\end{tabular}
+\label{tab:calculated_lfp_params}
+\end{table}
+
+\subsubsection{Nickel-Rich NMC - Cathode Material}
+
+We have the following parameters:
+
+\vspace{2mm}
+
+\renewcommand{\arraystretch}{1} 
+\begin{table}[H]
+\centering
+\small
+\caption{Properties of Nickel-Rich NMC Cathode Material.}
+\begin{tabular}{@{}lp{3cm}l@{}}
+\toprule
+\textbf{Parameter} & \textbf{Description} & \textbf{Value} \\ 
+\midrule
+\( \Omega_P \) & Partial molar volume of lithium & \( 1.23 \times 10^{-6} \, \text{m}^3/\text{mol} \) \cite{li2019nmc} \\
+\( C_P^{\text{max}} \) & Maximum lithium concentration & \( 2.78 \times 10^4 \, \text{mol/m}^3 \) \cite{li2019nmc} \\
+\( E_P \) & Young's modulus& \( 2.0 \times 10^{11} \, \text{N/m}^2 \) \cite{li2019nmc} \\
+\( \nu_P \) & Poisson's ratio& \( 0.28\) \cite{li2019nmc} \\
+\( \rho_P \) & Density & \( 4.8 \, \text{g/cm}^3 \) \cite{li2019nmc} \\
+\( R \) & Radius of particles & \( 2 \times 10^{-6} \, \text{m} \) \cite{li2019nmc} \\
+\( q_0 \) & Initial capacity per gram & \( 280 \, \text{mAh/g} \) \cite{li2019nmc} \\
+\bottomrule
+\end{tabular}
+\label{tab:nmc_properties_cited}
+\end{table}
+
+\renewcommand{\arraystretch}{3} 
+\begin{table}[H]
+\centering
+\small
+\caption{Calculated Parameters for Nickel-Rich NMC Cathode Material.}
+\begin{tabular}{@{}lp{4.2cm}l@{}}
+\toprule
+\textbf{Parameter} & \textbf{Formula/Description} & \textbf{Value} \\ 
+\midrule
+\( Q_0 \) & \( q_0 \cdot \rho_P \cdot \frac{4}{3} \pi R^3 \) & $4.50 \times 10^{-11} Ah$ \\
+\( A_\theta \) & \( \frac{E_S \frac{\Omega_P}{3} C_{max}^P}
+    { 3(1 - \nu_S) + \left( \frac{E_S (1 - 2 \nu_P)}{E_P} - (1 - 2 \nu_S) \right) \frac{6w}{R}}  \) & $3.64 \times 10^8 N/m^2$ \\
+\( a' \) & \( \frac{18 \pi A_\theta^2}{\gamma E_S R^4} \) & $4.72 \times 10^{30} 1/m^5$ \\
+\( a' Q_0 \) & \( a' \cdot Q_0 \) & $2.13 \times 10^{20} Ah/m^5$ \\
+\bottomrule
+\end{tabular}
+\label{tab:calculated_nmc_params}
+\end{table}
+
+\vspace{2mm}
+
+\subsubsection{Comparison of Materials}
+
+From the calculated values, the following trends are observed:
+
+\begin{itemize}
+    \item \textbf{Silicon (Anode Material):} Despite its high \(q_0\), the smaller particle size (\(R\)), and higher modulus (\(E_P\)) result in the lowest \(a'Q_0\). 
+    
+    \item \textbf{Lithium Iron Phosphate (LFP, Cathode Material):} LFP offers a balanced performance with moderate \(a'Q_0\). 
+
+    \item \textbf{Graphite (Anode Material):} Graphite's high particle radius (\(R\)) and relatively lower modulus (\(E_P\)) contribute to a moderate \(a'Q_0\). W
+
+    \item \textbf{Nickel-Rich NMC (Cathode Material):} NMC exhibits a higher \(a'Q_0\) compared to other materials due to its combination of moderate modulus (\(E_P\)) and higher density (\(\rho_P\)). 
+
+    \item \textbf{Lithium Manganese Oxide (LMO, Cathode Material):} LMO has a higher \(a'Q_0\) due to its lower capacity (\(q_0\)) and higher density (\(\rho_P\)).
+\end{itemize}
+
+\begin{table}[H]
+\centering
+\setlength{\tabcolsep}{4pt} % Adjust column padding
+\footnotesize
+\caption{Comparison of Electrode Materials}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Material} & \textbf{Radius (\(R\))} & \textbf{Cap. (\(q_0\))} & \textbf{Modulus (\(E_P\))} & \textbf{\(a'Q_0\)} \\ 
+\hline
+Graphite (Anode) & High & Moderate & Low & Moderate \\
+LMO (Cathode)    & Moderate & Low & High & High \\
+Silicon (Anode)  & Low & High & High & Low \\
+LFP (Cathode)    & Moderate & Moderate & Moderate & Moderate \\
+NMC (Cathode)    & Moderate & High & Moderate & High \\
+\hline
+\end{tabular}
+\label{tab:material_comparison_compact}
+\end{table}
+
+
+\textbf{Key Takeaway:} Silicon demonstrates the lowest \(a'Q_0\), suggesting superior potential for stress minimization. However, practical implementation demands addressing its mechanical challenges. LFP emerges as a more stable choice with moderate \(a'Q_0\), offering a viable trade-off between safety, stability, and cost-effectiveness. \\
+
+
+\section{Conclusion}
+
+\vspace{2mm}
+
+This study provides a comprehensive theoretical framework to analyze the mechanical degradation of lithium-ion batteries (LIBs), focusing on the role of the solid electrolyte interphase (SEI) layer in capacity fade and overall battery performance. By integrating stress analysis, strain energy calculations, and the evolution of the state-of-lithiation over cycling, the research highlights the critical interplay between mechanical stresses and the fracture dynamics of the SEI layer. The derived models quantify the capacity loss due to SEI cracking and reformation, offering valuable insights into the mechanisms that drive long-term degradation in LIBs.
+
+The results demonstrate that tangential stresses within the SEI layer contribute predominantly to the strain energy driving SEI fractures. Additionally, the material properties of both the SEI layer and the active material, including Young’s modulus, Poisson’s ratio, and surface energy, significantly influence the mechanical stability and performance of LIBs. The comparison across different materials, such as graphite, silicon, and lithium iron phosphate, highlights their suitability for specific applications, with silicon showing great potential despite its inherent mechanical challenges.
+
+Future work should aim to expand this framework by incorporating the effects of thermal cycling, multi-particle interactions, and particle aging in the SEI's composition and mechanical properties. Additionally, experimental validation of the derived models would further strengthen their applicability and reliability in real-world scenarios. Beyond the current scope, advanced materials engineering strategies, such as the development of more flexible SEI layers or adaptive coatings, could mitigate mechanical degradation and enhance battery longevity.
+
+As LIBs continue to play a pivotal role in energy storage technologies, the insights from this research can guide the design of next-generation batteries with improved performance, safety, and durability. Through a deeper understanding of the mechanical factors contributing to capacity fade, this work lays the foundation for innovative solutions that address the growing demands of modern energy systems.
+
+\section{Acknowledgments}
+This research would not have been possible without the generous support of the Cambridge Center for International Research. Their assistance in facilitating this study is deeply appreciated. 
+
+Special thanks to Dr. Peter Ozaveche Oviroh\href{https://scholar.google.com/citations?user=72x-yOkAAAAJ&hl=en}{*} for his indispensable contribution and invaluable guidance throughout the course of this research. His expertise and insights greatly enhanced the quality and scope of this work.
+
+
+
+
+\section{List Of Symbols}
+\renewcommand{\arraystretch}{1} 
+\begin{table}[H]
+\centering
+\small
+
+\begin{tabular}{@{}lp{5cm}l@{}}
+\toprule
+\textbf{Symbol} & \textbf{Description} & \textbf{Unit} \\ 
+\midrule
+$A_{new}$ & total new exposed area of the SEI layer during cracking & $m^{2}$ \\
+
+$A_{new,i}$ & new exposed area of the SEI layer for crack $i$ & $m^{2}$ \\
+
+$A_{P,new}$ & total new exposed area of the electrode & $m^{2}$ \\
+
+$A_r$ & proportionality constant defined for smoother notation & $N/m^2$ \\
+
+$A_\theta$ & proportionality constant defined for smoother notation & $N/m^2$ \\
+
+$a$ & proportionality constant of capacity loss over to state-of-lithiation & $m^{-5}$ \\
+
+$a'$ & proportionality factor of $a$ to cell's parameters & $m^{-5}$ \\
+
+$C(r,t)$ & lithium concentration at radius $r$ and time $t$ & $mol/m^3$ \\
+
+$C_{avg}(r)$ & timed-averaged lithium concentration at radius $r$ & $mol/m^3$ \\
+
+$C_{max}^P$ & maximum theoretical lithium concentration in the Active Material $r$ & $mol/m^3$ \\
+
+$C_{ini}$ & lithium concentration at time $t = 0$ & $mol/m^3$ \\
+
+$c$ & lower integration boundary ($0$ for Active material and $R_P$ for the SEI layer) & $m$ \\
+
+$d$ & width of SEI crack & $m$ \\
+
+$D_P$ & diffusion coefficient of Active Material & $m^2/s$ \\
+
+$e$ & local strain energy density & $J/m^3$ \\
+
+$E$ & Young modulus & $N/m^2$ \\ 
+
+$E_P$ & Young modulus of Active Material & $N/m^2$ \\ 
+
+$E_S$ & Young modulus of SEI layer & $N/m^2$ \\ 
+
+$f$ & analytic function for modeling capacity & $ $ \\
+
+$F$ & Faraday constant & $C/mol$ \\
+
+$G$ & shear modulus & $N/m^2$ \\ 
+
+$I$ & current density through electrode & $A/m^2$ \\
+
+$I_{1,S}$ & proportionality constant defined for smoother notation & $ $ \\
+
+$I_{1,P}$ & proportionality constant defined for smoother notation & $ $ \\
+
+$I_{2,S}$ & proportionality constant defined for smoother notation & $m^3$ \\
+
+$I_{2,P}$ & proportionality constant defined for smoother notation & $m^3$ \\
+
+$k$ & proportionality constant of state-of-lithiation amplitude to electrode capacity & $C^{-1}$ \\
+
+$l_i$ & length of crack $i$ & $m$ \\
+
+$l_{crack}^{total}$ & total length of cracks & $m$ \\ 
+
+$q_0$ & initial capacity per gram of Active Material & $mAh/g$ \\
+
+$q_{amp, i}$ & amplitude of the charge on the cell
+when the cell is charged form $V_{min}$ to $V_{max}$ & $Ah$ \\
+
+$q_{max}$ & maximum charge that the cell can theoretically host & $Ah$ \\
+
+$Q_0$ & initial capacity of the cell & $Ah$ \\
+
+$Q_i$ & capacity of the cell after $n$ cycles & $Ah$ \\
+
+$Q_{loss}$ & capacity loss & $Ah$ \\
+
+$Q_{loss, i}$ & capacity loss during the $i$-th cycle & $Ah$ \\ 
+
+($r$, $\theta$, $\phi$) & spherical coordinates & $ $ \\
+
+$R$ & total radius of the cell & $m$ \\
+
+$R_P$ & radius of the Active Material & $m$ \\ 
+
+$SOL$ & state-of-lithiation & $ $ \\
+
+$\Delta SOL$ & state-of-lithiation swing & $ $ \\
+
+$\Delta SOL_{amp}$ & amplitude of state-of-litiation swing & $ $\\
+
+\bottomrule
+\end{tabular}
+
+\end{table}
+
+
+
+\begin{table}[H]
+\centering
+\small
+
+\begin{tabular}{@{}lp{5cm}l@{}}
+\midrule
+$\Delta SOL_{amp, i}$ & amplitude of state-of-lithiation swing during $i$-th cycle & $ $ \\
+
+$t$ & time & $s$ \\
+
+$u$ & displacement & $m$ \\
+
+$V_{min}$ & minimum voltage on the cell during cycling & $V$\\
+
+$V_{max}$ & maximum voltage on the cell during cycling & $V$\\
+
+$w$ & thickness of SEI layer & $m$ \\
+
+$x$ & dimensionless radius & $ $ \\
+
+$\alpha$ & proportionality constant of the charge on the cell during the $n$-th cycle and its capacity after the $(n-1)$-th cycle & $ $ \\
+
+$\gamma$ & surface energy of SEI layer & $J/m^2$ \\
+
+$\delta_{ij}$ & Kronecker delta & $ $\\
+
+$\epsilon_r$ & radial strain & $ $\\
+
+$\epsilon_\theta$ & tangential strain & $ $\\
+
+$\epsilon_{ch}$ & chemical strain & $ $\\
+
+$\epsilon_{ij}$ & strain tensor & $ $\\
+
+$\lambda$ & Lamé’s first parameter & $N/m^2$\\
+
+$\lambda_n$ & $n$-th solution of equation $tg(z) = z$ & $ $\\
+
+$\nu$ & Poisson ratio & $ $\\
+
+$\nu_S$ & Poisson ratio for SEI layer & $ $\\
+
+$\nu_P$ & Poisson ratio for Active Material & $ $\\
+
+$\Pi_{total}$ & total strain energy & $J$ \\
+
+$\Pi_S$ & strain energy of SEI layer & $J$ b\\ 
+
+$\rho_S$ & density of SEI layer & $kg/m^3$ \\
+
+$\rho_P$ & density of Active Material & $kg/m^3$ \\
+
+$\sigma_r$ & radial stress & $N/m^2$ \\
+
+$\sigma_r\theta$ & tangential stress & $N/m^2$ \\
+
+$\sigma_r^S$ & radial stress of the SEI layer & $N/m^2$ \\
+
+$\sigma_\theta^S$ & tangential stress of the SEI layer & $N/m^2$ \\
+
+$\sigma_r^P$ & radial stress of the Active Material & $N/m^2$ \\
+
+$\sigma_\theta^P$ & tangential stress of the Active Material & $N/m^2$ \\
+
+$\sigma_{ij}$ & strain tensor & $N/m^2$ \\
+
+$\tau$ & dimensionless time & $ $\\
+
+$\Omega$ & partial molar volume& $m^3/mol$ \\
+
+$\Omega_S$ & partial molar volume of the SEI layer & $m^3/mol$ \\
+
+$\Omega$ & partial molar volume of the Active Material & $m^3/mol$ \\
+
+
+\bottomrule
+\end{tabular}
+
+\end{table}
+
+
+
+
+
+\bibliographystyle{IEEEtran}
+\bibliography{ref2.bib}
+
+\end{document}

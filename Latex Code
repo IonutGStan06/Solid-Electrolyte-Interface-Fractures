@@ -1,6 +1,6 @@
 \documentclass[twocolumn]{IEEEtran}
 \raggedbottom
-\usepackage{amsmath, amssymb, graphicx, cite, hyperref, textcomp}
+\usepackage{amsmath, amssymb, graphicx, hyperref, textcomp}
 \usepackage{pdflscape}
 \usepackage{array}
 \usepackage{rotating}
@@ -8,15 +8,17 @@
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{float}
+\usepackage[backend=bibtex,style=ieee, doi=true,isbn=false,url=false]{biblatex}
+\addbibresource{ref2.bib}
 
 \pgfplotsset{compat=1.16}
-
+\renewcommand{\thetable}{\arabic{table}}
 
 \title{Modeling of Mechanical Degradation in Lithium-Ion Batteries: An Analysis of Solid Electrolyte Interface Fractures}
 
 \author{
     Ionu\c{t} Gabriel Stan\IEEEauthorrefmark{2},
-    Dr. Peter Ozaveche Oviroh\href{https://scholar.google.com/citations?user=72x-yOkAAAAJ&hl=en}{\IEEEauthorrefmark{1}}
+    Peter Ozaveche Oviroh\href{https://scholar.google.com/citations?user=72x-yOkAAAAJ&hl=en}{\IEEEauthorrefmark{1}}
 }
 
 \begin{document}
@@ -28,11 +30,11 @@
 
 \vspace{5mm}
 
-\begin{abstract} This paper develops a comprehensive theoretical framework to model the mechanical degradation of lithium-ion batteries (LIBs), with a particular focus on the solid electrolyte interphase (SEI) layer. By deriving and solving the differential equations for stress and strain distributions in both the SEI and active materials during lithium-ion cycling, this study quantifies the impact of SEI cracking on capacity fade. A strain energy density model is proposed to predict SEI fracture dynamics and establish a relationship between the state-of-lithiation (SOL) amplitude and capacity loss over multiple cycles.
+\begin{abstract}This paper develops a comprehensive theoretical framework to model the mechanical degradation of lithium-ion batteries (LIBs), with a particular emphasis on the solid electrolyte interphase (SEI) layer. The SEI layer, a critical but fragile component, is modeled to understand its role in capacity fade through the evaluation of the stress and strain distribution equations in both SEI and active materials during lithium-ion cycling. A strain energy density model is introduced to predict SEI fracture dynamics and establish a direct relationship between state-of-lithiation (SOL) amplitude and capacity loss, providing key insights into long-term energy sustainability in LIBs.
 
 Key contributions include a detailed mathematical analysis of the interplay between radial and tangential stresses, and the development of a capacity fade model that links SEI mechanical properties and material parameters to long-term LIB performance. Additionally, the study offers a comparative evaluation of common electrode materials, such as graphite, silicon, and lithium ion phosphate, to determine their suitability for various applications based on mechanical stability and energy density.
 
-Through this work, we provide critical insights into the mechanics of SEI degradation, offering a way for optimizing LIB materials and design to enhance durability and mitigate capacity loss. \\
+This research provides  insights into SEI mechanics, emphasizing its cracking as a driving factor of capacity loss. The findings are instrumental in guiding the optimization of electrode materials and LIB design, targeting enhanced durability and reduced capacity loss. 
 \end{abstract}
 
 \section{Introduction}
@@ -45,7 +47,7 @@ Through this work, we provide critical insights into the mechanics of SEI degrad
 
 
 
-Lithium-ion batteries (LIBs) have become indispensable in modern energy storage systems due to their high energy density, long cycle life, and lightweight nature. These features have made LIBs the technology of choice for a range of applications, from portable electronics and electric vehicles (EVs) to renewable energy grid storage \cite{tarascon2001issues, bruce2008energy, goodenough2010lithium}. LIBs operate based on the reversible intercalation of lithium ions between the cathode and anode materials, facilitated by a liquid or solid electrolyte \cite{whittingham2004lithium, armand2008building}.
+Lithium-ion batteries (LIBs) have become indispensable in modern energy storage systems due to their high energy density, long cycle life, and lightweight nature. These features have made LIBs the technology of choice for a range of applications, from portable electronics and electric vehicles (EVs) to renewable energy grid storage \cite{tarascon2001issues, bruce2008energy}. LIBs operate based on the reversible intercalation of lithium ions between the cathode and anode materials, facilitated by a liquid or solid electrolyte \cite{whittingham2004lithium, armand2008building}.
 
 A typical lithium-ion battery (LIB) consists of three key components: an anode, a cathode, and an electrolyte that facilitates the movement of lithium ions between the electrodes during charge and discharge cycles \cite{tarascon2001issues, whittingham2004lithium, nobel2019}. The electrodes are separated by a thin porous separator to prevent direct electrical contact while allowing ionic flow. This layered configuration is shown below, in Figure (\ref{fig:sei_layer}). 
 
@@ -56,7 +58,7 @@ A typical lithium-ion battery (LIB) consists of three key components: an anode, 
     \label{fig:sei_layer}
 \end{figure}
 
-In recent years, the growing demand for EVs and renewable energy systems has driven significant research efforts to improve LIB performance. Advances in high-capacity anode materials, such as silicon, and strategies to stabilize the SEI layer have shown promise in extending battery life and enhancing stability under extreme cycling conditions \cite{goodenough2010lithium, bruce2008energy}. Addressing these challenges is critical to achieving global sustainability goals and enabling the transition to carbon-neutral energy systems.
+In recent years, the growing demand for EVs and renewable energy systems has driven significant research efforts to improve LIB performance. Advances in high-capacity anode materials, such as silicon, and strategies to stabilize the SEI layer have shown promise in extending battery life and enhancing stability under extreme cycling conditions \cite{bruce2008energy}. Addressing these challenges is critical to achieving global sustainability goals and enabling the transition to carbon-neutral energy systems.
 
 \vspace{2mm}
 
@@ -64,7 +66,7 @@ In recent years, the growing demand for EVs and renewable energy systems has dri
 
 \vspace{2mm}
 
-One of the key challenges limiting the performance and longevity of lithium-ion batteries (LIBs) is mechanical degradation, which arises primarily due to the degradation of electrode materials over repeated charge-discharge cycles \cite{nobel2019, chen2024}. This process induces volumetric changes in the active materials, leading to stress accumulation and eventually to particle fracture, \cite{zhao2016mechanics, cheng2011diffusion_stresses}. Over time, these mechanical stresses compromise the structural integrity of the electrodes, resulting in capacity fade and reduced cycle life \cite{ arora1998battery}.
+One of the key challenges limiting the performance and longevity of lithium-ion batteries (LIBs) is mechanical degradation, which arises primarily due to the degradation of electrode materials over repeated charge-discharge cycles \cite{nobel2019, chen2024}. This process induces volumetric changes in the active materials, leading to stress accumulation and eventually to particle fracture, \cite{cheng2011diffusion_stresses}. Over time, these mechanical stresses compromise the structural integrity of the electrodes, resulting in capacity fade and reduced cycle life.
 
 To ensure the broader adoption of LIBs in applications such as electric vehicles and large-scale energy storage systems, these limitations must be addressed. The development of advanced material and electrode technologies, including the use of surface coatings and improved electrolytes, is essential for enhancing the performance and safety of LIBs.
 
@@ -80,7 +82,7 @@ The thickness of the SEI layer can range from a few angstroms to hundreds of ang
 
 During these cycling processes, the SEI layer experiences mechanical stresses that lead to the formation of microcracks\cite{peled1979sei, woodford2010stress}. These cracks expose fresh active material to the electrolyte, triggering additional SEI formation as the electrolyte decomposes on the newly exposed surface. This not only consumes lithium ions but also results in the thickening of the SEI layer, which increases resistance and reduces battery efficiency \cite{laresgoiti2015sei, woodford2010stress}. 
 
-Moreover, the SEI can exhibit a limited rehealing behavior, where some of the cracks seal as new SEI forms (Figure (\ref{fig:crack})). However, this rehealing is often incomplete, leading to uneven layer growth and mechanical instability over time. Lithium ions can become irreversibly trapped within the SEI during this process, further contributing to capacity fade \cite{zhao2016mechanics, woodford2010stress}. The repeated cycle of cracking, rehealing, and ion trapping significantly impacts the long-term performance of lithium-ion batteries, making the SEI layer both a critical enabler and a major bottleneck in battery technology.
+Moreover, the SEI can exhibit a limited rehealing behavior, where some of the cracks seal as new SEI forms (Figure (\ref{fig:crack})). However, this rehealing is often incomplete, leading to uneven layer growth and mechanical instability over time. Lithium ions can become irreversibly trapped within the SEI during this process, further contributing to capacity fade \cite{woodford2010stress}. The repeated cycle of cracking, rehealing, and ion trapping significantly impacts the long-term performance of lithium-ion batteries, making the SEI layer both a critical enabler and a major bottleneck in battery technology.
 
 \begin{figure}[H]
     \centering
@@ -685,51 +687,56 @@ $$\Delta SOL_{amp} = max (\Delta SOL)$$
 
 as the amplitude of the state-of-lithiation swing over the cycles.
 
-From Equation (\ref{42.x}), we can look at the graph of $\Delta SOL$ over a few cycles:\\
+From Equation (\ref{42.x}), we can look at the graph of $\Delta SOL$ (Figure (\ref{fig:delta_sol_cycles})) over a few cycles:\\
 
-\begin{tikzpicture}
-\begin{axis}[
-    xlabel={Cycle},
-    ylabel={$\Delta SOL$ (\%)},
-    legend pos=north east,
-    grid=both
-]
-
-\addplot[color=black, thick] coordinates {
-    (0, 0)
-    (0.5, 25)
-    (1, 0)
-    (1.5, 25)
-    (2, 0)
-    (2.5, 25)
-    (3, 0)
-};
-\addlegendentry{$\Delta SOL_{\text{amp}}=25\%$}
-
-\addplot[color=red, thick] coordinates {
-    (0, 0)
-    (0.5, 50)
-    (1, 0)
-    (1.5, 50)
-    (2, 0)
-    (2.5, 50)
-    (3, 0)
-};
-\addlegendentry{$\Delta SOL_{\text{amp}}=50\%$}
-
-\addplot[color=blue, thick] coordinates {
-    (0, 0)
-    (0.5, 90)
-    (1, 0)
-    (1.5, 90)
-    (2, 0)
-    (2.5, 90)
-    (3, 0)
-};
-\addlegendentry{$\Delta SOL_{\text{amp}}=90\%$}
-
-\end{axis}
-\end{tikzpicture}
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}
+    \begin{axis}[
+        xlabel={Cycle},
+        ylabel={$\Delta SOL$ (\%)},
+        legend pos=north east,
+        grid=both
+    ]
+    
+    \addplot[color=black, thick] coordinates {
+        (0, 0)
+        (0.5, 25)
+        (1, 0)
+        (1.5, 25)
+        (2, 0)
+        (2.5, 25)
+        (3, 0)
+    };
+    \addlegendentry{$\Delta SOL_{\text{amp}}=25\%$}
+    
+    \addplot[color=red, thick] coordinates {
+        (0, 0)
+        (0.5, 50)
+        (1, 0)
+        (1.5, 50)
+        (2, 0)
+        (2.5, 50)
+        (3, 0)
+    };
+    \addlegendentry{$\Delta SOL_{\text{amp}}=50\%$}
+    
+    \addplot[color=blue, thick] coordinates {
+        (0, 0)
+        (0.5, 90)
+        (1, 0)
+        (1.5, 90)
+        (2, 0)
+        (2.5, 90)
+        (3, 0)
+    };
+    \addlegendentry{$\Delta SOL_{\text{amp}}=90\%$}
+    
+    \end{axis}
+    \end{tikzpicture}
+    \caption{Variation of $\Delta SOL$ amplitude over multiple cycles.}
+    \label{fig:delta_sol_cycles}
+\end{figure}
 
 Note that we do not consider any change in the state-of-lithiation amplitude over the first few cycles as it can be neglected for small number of cycles.\\
 
@@ -885,7 +892,9 @@ where:
     \label{fig:area}
 \end{figure}
 
-For a crack of length $l_i$ the new are is:
+\clearpage
+
+As can be seen from Figure (\ref{fig:area}), a crack of length $l_i$ the new are is:
 
 $$A_{new, i} = 2 \cdot l_i \cdot w$$
 
@@ -944,7 +953,7 @@ In Equation (\ref{45}) the proportionality constant $a$ is a function of a large
 \begin{equation}
     \label{66.z}
     a \propto \frac{18 \pi A_\theta^2}{\gamma E_S R^4} \equiv a'
-\end{equation}\\
+\end{equation}
 
 
 \subsubsection{Evolution of Capacity over Multiple Cycles} 
@@ -1079,66 +1088,71 @@ So the capacity after $n$ cycles is very well approximated by:
 
 For a clearer image of this evolution, below is provided the graph of $f(n) = \frac{Q_n}{Q_0}$ for different values of $ak^2 Q_0$:\\
 
-\begin{tikzpicture}
-    \hspace*{-2em}
-    \begin{axis}[
-        xlabel={\( n \) (Cycle Number)},
-        ylabel={\( f(n) = \frac{Q_n}{Q_0} \) (Relative Capacity)},
-        grid=both,
-        legend style={font=\footnotesize, at={(0.5,-0.2)}, column sep=2pt, anchor=north, legend columns=-1},
-        xmin=-50, xmax=1000, 
-        ymin=0, ymax=1,
-        axis line style={thick},
-        tick style={semithick},
-    ]
-        \addplot[
-            only marks, 
-            mark=*, 
-            mark size=1pt, 
-            color=red, 
-            samples=50,
-            domain=0:1000
-        ] 
-        {1/(1 + 0.0001 * x)};
-        \addlegendentry{\( ak^2Q_0 = 0.0001 \) }
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}
+        \hspace*{-2em}
+        \begin{axis}[
+            xlabel={\( n \) (Cycle Number)},
+            ylabel={\( f(n) = \frac{Q_n}{Q_0} \) (Relative Capacity)},
+            grid=both,
+            legend style={font=\footnotesize, at={(0.5,-0.2)}, column sep=2pt, anchor=north, legend columns=-1},
+            xmin=-50, xmax=1000, 
+            ymin=0, ymax=1,
+            axis line style={thick},
+            tick style={semithick},
+        ]
+            \addplot[
+                only marks, 
+                mark=*, 
+                mark size=1pt, 
+                color=red, 
+                samples=50,
+                domain=0:1000
+            ] 
+            {1/(1 + 0.0001 * x)};
+            \addlegendentry{\( ak^2Q_0 = 0.0001 \) }
 
-        \addplot[
-            only marks, 
-            mark=*, 
-            mark size=1pt, 
-            color=orange, 
-            samples=50,
-            domain=0:1000
-        ] 
-        {1/(1 + 0.001 * x)};
-        \addlegendentry{\( ak^2Q_0 = 0.001 \) }
+            \addplot[
+                only marks, 
+                mark=*, 
+                mark size=1pt, 
+                color=orange, 
+                samples=50,
+                domain=0:1000
+            ] 
+            {1/(1 + 0.001 * x)};
+            \addlegendentry{\( ak^2Q_0 = 0.001 \) }
 
-        \addplot[
-            only marks, 
-            mark=*, 
-            mark size=1pt, 
-            color=green, 
-            samples=50,
-            domain=0:1000
-        ] 
-        {1/(1 + 0.005 * x)};
-        \addlegendentry{\( ak^2Q_0=0.005 \) }
+            \addplot[
+                only marks, 
+                mark=*, 
+                mark size=1pt, 
+                color=green, 
+                samples=50,
+                domain=0:1000
+            ] 
+            {1/(1 + 0.005 * x)};
+            \addlegendentry{\( ak^2Q_0=0.005 \) }
 
-        \addplot[
-            only marks, 
-            mark=*, 
-            mark size=1pt, 
-            color=blue, 
-            samples=50,
-            domain=0:1000
-        ] 
-        {1/(1 + 0.01 * x)};
-        \addlegendentry{\( ak^2Q_0=0.01 \) }
-    \end{axis}
+            \addplot[
+                only marks, 
+                mark=*, 
+                mark size=1pt, 
+                color=blue, 
+                samples=50,
+                domain=0:1000
+            ] 
+            {1/(1 + 0.01 * x)};
+            \addlegendentry{\( ak^2Q_0=0.01 \) }
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Evolution of relative capacity}
+    \label{fig:relative_capacity}
+\end{figure}
 
-\end{tikzpicture}
 
-The graph above indicates that for lower values of \( ak^2Q_0 \), such as 0.0001 (red curve), the capacity degradation is gradual, indicating better stability over extended cycling. In contrast, higher values of \( ak^2Q_0 \), such as 0.01 (blue curve), result in rapid capacity loss, emphasizing the significant influence of this parameter on battery performance. These trends highlight the importance of optimizing mechanical and electrochemical factors to minimize \( ak^2Q_0 \) and improve cycle life. 
+The graph form Figure (\ref{fig:relative_capacity}) indicates that for lower values of \( ak^2Q_0 \), such as 0.0001 (red curve), the capacity degradation is gradual, indicating better stability over extended cycling. In contrast, higher values of \( ak^2Q_0 \), such as 0.01 (blue curve), result in rapid capacity loss. 
 
 \vspace{2mm}
 
@@ -1146,21 +1160,21 @@ The graph above indicates that for lower values of \( ak^2Q_0 \), such as 0.0001
 
 \vspace{2mm}
 
-Lithium-ion batteries utilize a variety of electrode materials, each tailored to specific applications based on their electrochemical and mechanical properties. In this section, we analyzed a variety of materials in the context of the proposed SEI fracture model. The materials we focus on are:
+Lithium-ion batteries utilize a variety of electrode materials, each tailored to specific applications based on their electrochemical properties. In this section, we analyzed a variety of materials in the context of the proposed SEI fracture model. The materials we focus on are:
 
 \begin{itemize}
-    \item \textbf{Graphite (Anode Material):} The most commonly used anode material in commercial lithium-ion batteries. Graphite is widely applied in portable electronics and electric vehicles \cite{dahn1995graphite}.
+    \item \textbf{Graphite (Anode Material):} The most commonly used anode material in commercial lithium-ion batteries. Graphite is widely applied in portable electronics and electric vehicles \cite{buchholz2020success}.
 
-    \item \textbf{Lithium Manganese Oxide (LMO, Cathode Material):} A cathode material known for its thermal stability, safety, and affordability.  \cite{thackeray1983lmo}.
+    \item \textbf{Lithium Manganese Oxide (LMO, Cathode Material):} A cathode material known for its thermal stability, safety, and affordability.  \cite{song2023building}.
 
-    \item \textbf{Silicon (Anode Material):} A high-capacity anode material gaining attention for its potential to significantly increase energy density. \cite{xu2018silicon}.
+    \item \textbf{Silicon (Anode Material):} A high-capacity anode material gaining attention for its potential to significantly increase energy density. \cite{liang2014silicon}.
 
     \item \textbf{Lithium Iron Phosphate (LFP, Cathode Material):} Renowned for its stability and safety, LFP is used in applications requiring long cycle life \cite{padhi1997lfp}.
 
     \item \textbf{Nickel-Rich NMC (Cathode Material):} A high-energy-density cathode material, such as NMC811, used primarily in electric vehicles.  \cite{li2019nmc}.
 \end{itemize}
 
-In this analysis, the focus is on the SEI layer material primarily formed of lithium carbonate (\textbf{Li$_2$CO$_3$}), as it is a common and well-characterized constituent of the SEI across these systems. 
+In this analysis, as can be seen from Table (\ref{t1}), the focus is on the SEI layer material primarily formed of lithium carbonate (\textbf{Li$_2$CO$_3$}), as it is a common and well-characterized constituent of the SEI across these systems and whose properties are shown in Table (\ref{t2}). 
 
 \begin{table}[H]
 \centering
@@ -1170,14 +1184,14 @@ In this analysis, the focus is on the SEI layer material primarily formed of lit
 \toprule
 \textbf{Active Material} & \textbf{SEI Layer Material} & \textbf{Cycling Rate} \\ 
 \midrule
-Graphite \cite{dahn1995graphite} & $Li_2CO_3$  & 0.5 C \\
-LMO \cite{thackeray1983lmo} & $Li_2CO_3$ & 1 C \\
-Silicon \cite{xu2018silicon} & $Li_2CO_3$  & 0.1 C \\
+Graphite \cite{buchholz2020success} & $Li_2CO_3$  & 0.5 C \\
+LMO \cite{song2023building} & $Li_2CO_3$ & 1 C \\
+Silicon \cite{liang2014silicon} & $Li_2CO_3$  & 0.1 C \\
 LFP \cite{padhi1997lfp} & $Li_2CO_3$  & 2 C \\
 NMC \cite{li2019nmc} & $Li_2CO_3$ & 0.5 C \\
 \bottomrule
 \end{tabular}
-\label{tab:material_properties_clean}
+\label{t1}
 \end{table}
 
 Where cycling rate, expressed in $C$, refers to the charge or discharge rate of the battery relative to its maximum capacity. (\textit{1C = 1 charge/discharge / hour})
@@ -1194,15 +1208,15 @@ $\rho_S$ & Density of \( \text{Li}_2\text{CO}_3 \) SEI layer & \( 2.11 \, \text{
 $E_S$ & Young’s Modulus of \( \text{Li}_2\text{CO}_3 \) & \( 6.6 \times 10^{10} \, \text{Nm}^{-2} \)\cite{shang2012lattice} \\
 $\nu_S$ & Poisson’s Ratio for SEI layer & \( 0.3 \)\cite{shang2012lattice} \\
 $w$ & Thickness of SEI layer & \( 50 \times 10^{-9} m \)\cite{shang2012lattice} \\
-$\gamma$ & Surface Energy of SEI layer & \( 1.5 J/m^2\)\cite{springer_gamma_li2co3} \\
+$\gamma$ & Surface Energy of SEI layer & \( 1.5 J/m^2\)\cite{liu2021solid} \\
 \bottomrule
 \end{tabular}
-\label{tab:Li2CO3}
+\label{t2}
 \end{table}
 
 \subsubsection{Graphite - Anode Material}
 
-We have the following parameters:
+The parameters are shown in Table (\ref{t3}):
 
 \vspace{2mm}
 
@@ -1216,14 +1230,14 @@ We have the following parameters:
 \midrule
 \( \Omega_P \) & Partial molar volume of lithium & \( 3.42 \times 10^{-6} \, \text{m}^3/\text{mol} \) \cite{cheng2011diffusion_stresses} \\
 \( C_P^{\text{max}} \) & Maximum lithium concentration & \( 3.18 \times 10^4 \, \text{mol/m}^3 \) \cite{cheng2011diffusion_stresses} \\
-\( E_P \) & Young's modulus& \( 1.5 \times 10^{10} \, \text{N/m}^2 \) \cite{dahn1995graphite} \\
-\( \nu_P \) & Poisson's ratio& \( 0.3\) \cite{dahn1995graphite} \\
-\( \rho_P \) & Density & \( 2.11 \, \text{g/cm}^3 \) \cite{dahn1995graphite} \\
+\( E_P \) & Young's modulus& \( 1.5 \times 10^{10} \, \text{N/m}^2 \) \cite{buchholz2020success} \\
+\( \nu_P \) & Poisson's ratio& \( 0.3\) \cite{buchholz2020success} \\
+\( \rho_P \) & Density & \( 2.11 \, \text{g/cm}^3 \) \cite{buchholz2020success} \\
 \( R \) & Radius of particles & \( 5 \times 10^{-6} \, \text{m} \) \cite{cheng2011diffusion_stresses} \\
-\( q_0 \) & Initial capacity per gram & \( 330 \, \text{mAh/g} \) \cite{dahn1995graphite} \\
+\( q_0 \) & Initial capacity per gram & \( 330 \, \text{mAh/g} \) \cite{buchholz2020success} \\
 \bottomrule
 \end{tabular}
-\label{tab:graphite_properties_cited}
+\label{t3}
 \end{table}
 
 \vspace{2mm}
@@ -1244,14 +1258,14 @@ We have the following parameters:
 \( a' Q_0 \) & \( a' \cdot Q_0 \) & $4.03 \times 10^{20} Ah/m^5$ \\
 \bottomrule
 \end{tabular}
-\label{tab:calculated_graphite_params}
+\label{t4}
 \end{table}
 
 \vspace{2mm}
 
 \subsubsection{Lithium Manganese Oxide (LMO) - Cathode Material}
 
-We have the following parameters:
+The parameters are shown in Table (\ref{t5}):
 
 \vspace{2mm}
 
@@ -1264,16 +1278,16 @@ We have the following parameters:
 \toprule
 \textbf{Parameter} & \textbf{Description} & \textbf{Value} \\ 
 \midrule
-\( \Omega_P \) & Partial molar volume of lithium & \( 2.4 \times 10^{-6} \, \text{m}^3/\text{mol} \) \cite{thackeray1983lmo} \\
-\( C_P^{\text{max}} \) & Maximum lithium concentration & \( 2.9 \times 10^4 \, \text{mol/m}^3 \) \cite{thackeray1983lmo} \\
-\( E_P \) & Young's modulus& \( 6.5 \times 10^{10} \, \text{N/m}^2 \) \cite{thackeray1983lmo} \\
-\( \nu_P \) & Poisson's ratio& \( 0.3\) \cite{thackeray1983lmo} \\
-\( \rho_P \) & Density & \( 4.3 \, \text{g/cm}^3 \) \cite{thackeray1983lmo} \\
-\( R \) & Radius of particles & \( 5 \times 10^{-6} \, \text{m} \) \cite{thackeray1983lmo} \\
-\( q_0 \) & Initial capacity per gram & \( 100 \, \text{mAh/g} \) \cite{thackeray1983lmo} \\
+\( \Omega_P \) & Partial molar volume of lithium & \( 2.4 \times 10^{-6} \, \text{m}^3/\text{mol} \) \cite{song2023building} \\
+\( C_P^{\text{max}} \) & Maximum lithium concentration & \( 2.9 \times 10^4 \, \text{mol/m}^3 \) \cite{song2023building} \\
+\( E_P \) & Young's modulus& \( 6.5 \times 10^{10} \, \text{N/m}^2 \) \cite{song2023building} \\
+\( \nu_P \) & Poisson's ratio& \( 0.3\) \cite{song2023building} \\
+\( \rho_P \) & Density & \( 4.3 \, \text{g/cm}^3 \) \cite{song2023building} \\
+\( R \) & Radius of particles & \( 5 \times 10^{-6} \, \text{m} \) \cite{song2023building} \\
+\( q_0 \) & Initial capacity per gram & \( 100 \, \text{mAh/g} \) \cite{song2023building} \\
 \bottomrule
 \end{tabular}
-\label{tab:lmo_properties_cited}
+\label{t5}
 \end{table}
 
 
@@ -1290,17 +1304,17 @@ We have the following parameters:
 \( A_\theta \) & \( \frac{E_S \frac{\Omega_P}{3} C_{max}^P}
     { 3(1 - \nu_S) + \left( \frac{E_S (1 - 2 \nu_P)}{E_P} - (1 - 2 \nu_S) \right) \frac{6w}{R}}  \) & $7,29 \times 10^8 N/m^2$ \\
 \( a' \) & \( \frac{18 \pi A_\theta^2}{\gamma E_S R^4} \) & $4.86 \times 10^{29} 1/m^5$ \\
-\( a' Q_0 \) & \( a' \cdot Q_0 \) & $1.09 \times 10^{20}$ \\
+\( a' Q_0 \) & \( a' \cdot Q_0 \) & $1.09 \times 10^{20} Ah/m^5$ \\
 \bottomrule
 \end{tabular}
-\label{tab:calculated_lmo_params}
+\label{t6}
 \end{table}
 
 \vspace{2mm}
 
 \subsubsection{Silicon - Anode Material}
 
-We have the following parameters:
+The parameters are shown in Table (\ref{t7}):
 
 \vspace{2mm}
 
@@ -1313,16 +1327,16 @@ We have the following parameters:
 \toprule
 \textbf{Parameter} & \textbf{Description} & \textbf{Value} \\ 
 \midrule
-\( \Omega_P \) & Partial molar volume of lithium & \( 1.21 \times 10^{-6} \, \text{m}^3/\text{mol} \) \cite{xu2018silicon} \\
-\( C_P^{\text{max}} \) & Maximum lithium concentration & \( 4.2 \times 10^4 \, \text{mol/m}^3 \) \cite{xu2018silicon} \\
-\( E_P \) & Young's modulus& \( 1.6 \times 10^{11} \, \text{N/m}^2 \) \cite{xu2018silicon} \\
-\( \nu_P \) & Poisson's ratio& \( 0.28\) \cite{xu2018silicon} \\
-\( \rho_P \) & Density & \( 2.33 \, \text{g/cm}^3 \) \cite{xu2018silicon} \\
-\( R \) & Radius of particles & \( 1 \times 10^{-6} \, \text{m} \) \cite{xu2018silicon} \\
-\( q_0 \) & Initial capacity per gram & \( 3500 \, \text{mAh/g} \) \cite{xu2018silicon} \\
+\( \Omega_P \) & Partial molar volume of lithium & \( 1.21 \times 10^{-6} \, \text{m}^3/\text{mol} \) \cite{liang2014silicon} \\
+\( C_P^{\text{max}} \) & Maximum lithium concentration & \( 4.2 \times 10^4 \, \text{mol/m}^3 \) \cite{liang2014silicon} \\
+\( E_P \) & Young's modulus& \( 1.6 \times 10^{11} \, \text{N/m}^2 \) \cite{liang2014silicon} \\
+\( \nu_P \) & Poisson's ratio& \( 0.28\) \cite{liang2014silicon} \\
+\( \rho_P \) & Density & \( 2.33 \, \text{g/cm}^3 \) \cite{liang2014silicon} \\
+\( R \) & Radius of particles & \( 1 \times 10^{-6} \, \text{m} \) \cite{liang2014silicon} \\
+\( q_0 \) & Initial capacity per gram & \( 3500 \, \text{mAh/g} \) \cite{liang2014silicon} \\
 \bottomrule
 \end{tabular}
-\label{tab:silicon_properties_cited}
+\label{t7}
 \end{table}
 
 \renewcommand{\arraystretch}{3} 
@@ -1334,21 +1348,21 @@ We have the following parameters:
 \toprule
 \textbf{Parameter} & \textbf{Formula/Description} & \textbf{Value} \\ 
 \midrule
-\( Q_0 \) & \( q_0 \cdot \rho_P \cdot \frac{4}{3} \pi R^3 \) & $3.42 \times 10^{-11}$ \\
+\( Q_0 \) & \( q_0 \cdot \rho_P \cdot \frac{4}{3} \pi R^3 \) & $3.42 \times 10^{-11}$ Ah \\
 \( A_\theta \) & \( \frac{E_S \frac{\Omega_P}{3} C_{max}^P}
     { 3(1 - \nu_S) + \left( \frac{E_S (1 - 2 \nu_P)}{E_P} - (1 - 2 \nu_S) \right) \frac{6w}{R}}  \) & $5.54 \times 10^{8} N/m^2$ \\
-\( a' \) & \( \frac{18 \pi A_\theta^2}{\gamma E_S R^4} \) & $1.75 \times 10^{32}$ \\
-\( a' Q_0 \) & \( a' \cdot Q_0 \) & $6.00 \times 10^{21}$ \\
+\( a' \) & \( \frac{18 \pi A_\theta^2}{\gamma E_S R^4} \) & $1.75 \times 10^{32} 1/m^5$ \\
+\( a' Q_0 \) & \( a' \cdot Q_0 \) & $6.00 \times 10^{21} Ah/m^5$ \\
 \bottomrule
 \end{tabular}
-\label{tab:calculated_silicon_params}
+\label{t8}
 \end{table}
 
 \clearpage
 
 \subsubsection{Lithium Iron Phosphate (LFP) - Cathode Material}
 
-We have the following parameters:
+The parameters are shown in Table (\ref{t9}):
 
 \vspace{2mm}
 
@@ -1370,7 +1384,7 @@ We have the following parameters:
 \( q_0 \) & Initial capacity per gram & \( 160 \, \text{mAh/g} \) \cite{padhi1997lfp} \\
 \bottomrule
 \end{tabular}
-\label{tab:lfp_properties_cited}
+\label{t9}
 \end{table}
 
 \vspace{2mm}
@@ -1391,12 +1405,12 @@ We have the following parameters:
 \( a' Q_0 \) & \( a' \cdot Q_0 \) & $8.98 \times 10^{19} Ah/m^5$ \\
 \bottomrule
 \end{tabular}
-\label{tab:calculated_lfp_params}
+\label{t10}
 \end{table}
 
 \subsubsection{Nickel-Rich NMC - Cathode Material}
 
-We have the following parameters:
+The parameters are shown in Table (\ref{t11}):
 
 \vspace{2mm}
 
@@ -1418,7 +1432,7 @@ We have the following parameters:
 \( q_0 \) & Initial capacity per gram & \( 280 \, \text{mAh/g} \) \cite{li2019nmc} \\
 \bottomrule
 \end{tabular}
-\label{tab:nmc_properties_cited}
+\label{t11}
 \end{table}
 
 \renewcommand{\arraystretch}{3} 
@@ -1437,14 +1451,14 @@ We have the following parameters:
 \( a' Q_0 \) & \( a' \cdot Q_0 \) & $2.13 \times 10^{20} Ah/m^5$ \\
 \bottomrule
 \end{tabular}
-\label{tab:calculated_nmc_params}
+\label{t12}
 \end{table}
 
 \vspace{2mm}
 
 \subsubsection{Comparison of Materials}
 
-From the calculated values, the following trends are observed:
+From the calculated values in Tables (\ref{t4}), (\ref{t6}), (\ref{t8}), (\ref{t10}), and (\ref{t12}), the following trends are observed:
 
 \begin{itemize}
     \item \textbf{Silicon (Anode Material):} Despite its high \(q_0\), the smaller particle size (\(R\)), and higher modulus (\(E_P\)) result in the lowest \(a'Q_0\). 
@@ -1458,12 +1472,15 @@ From the calculated values, the following trends are observed:
     \item \textbf{Lithium Manganese Oxide (LMO, Cathode Material):} LMO has a higher \(a'Q_0\) due to its lower capacity (\(q_0\)) and higher density (\(\rho_P\)).
 \end{itemize}
 
+Which we can synthesize into the Table (\ref{t13}):
+
 \begin{table}[H]
 \centering
-\setlength{\tabcolsep}{4pt} % Adjust column padding
+\setlength{\tabcolsep}{4pt} 
 \footnotesize
 \caption{Comparison of Electrode Materials}
 \begin{tabular}{|l|c|c|c|c|}
+
 \hline
 \textbf{Material} & \textbf{Radius (\(R\))} & \textbf{Cap. (\(q_0\))} & \textbf{Modulus (\(E_P\))} & \textbf{\(a'Q_0\)} \\ 
 \hline
@@ -1474,7 +1491,7 @@ LFP (Cathode)    & Moderate & Moderate & Moderate & Moderate \\
 NMC (Cathode)    & Moderate & High & Moderate & High \\
 \hline
 \end{tabular}
-\label{tab:material_comparison_compact}
+\label{t13}
 \end{table}
 
 
@@ -1499,6 +1516,21 @@ This research would not have been possible without the generous support of the C
 Special thanks to Dr. Peter Ozaveche Oviroh\href{https://scholar.google.com/citations?user=72x-yOkAAAAJ&hl=en}{*} for his indispensable contribution and invaluable guidance throughout the course of this research. His expertise and insights greatly enhanced the quality and scope of this work.
 
 
+\section{Declarations}
+
+\subsection{Author Contributions}
+Ionu\c{t} Gabriel Stan\IEEEauthorrefmark{2}: Data curation, Formal analysis, Investigation, Project administration, Software, Validation, Visualization, Writing – original draft. 
+
+Peter Ozaveshe Oviroh\href{https://scholar.google.com/citations?user=72x-yOkAAAAJ&hl=en}{\IEEEauthorrefmark{1}}: Data curation, Formal analysis, Investigation, Methodology, Supervision, Validation, Writing – review \& editing.
+
+\subsection{Declaration of Competing Interest}
+The authors declare that they have no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+
+\subsection{Data Availability}
+Data will be made available on request.
+
+\subsection{Funding}
+There is no funding for this work.
 
 
 \section{List Of Symbols}
@@ -1559,6 +1591,20 @@ $I_{1,S}$ & proportionality constant defined for smoother notation & $ $ \\
 
 $I_{1,P}$ & proportionality constant defined for smoother notation & $ $ \\
 
+\bottomrule
+\end{tabular}
+
+\end{table}
+
+
+
+\begin{table}[H]
+\centering
+\small
+
+\begin{tabular}{@{}lp{5cm}l@{}}
+\midrule
+
 $I_{2,S}$ & proportionality constant defined for smoother notation & $m^3$ \\
 
 $I_{2,P}$ & proportionality constant defined for smoother notation & $m^3$ \\
@@ -1596,19 +1642,6 @@ $\Delta SOL$ & state-of-lithiation swing & $ $ \\
 
 $\Delta SOL_{amp}$ & amplitude of state-of-litiation swing & $ $\\
 
-\bottomrule
-\end{tabular}
-
-\end{table}
-
-
-
-\begin{table}[H]
-\centering
-\small
-
-\begin{tabular}{@{}lp{5cm}l@{}}
-\midrule
 $\Delta SOL_{amp, i}$ & amplitude of state-of-lithiation swing during $i$-th cycle & $ $ \\
 
 $t$ & time & $s$ \\
@@ -1684,10 +1717,9 @@ $\Omega$ & partial molar volume of the Active Material & $m^3/mol$ \\
 \end{table}
 
 
+\printbibliography
 
 
 
-\bibliographystyle{IEEEtran}
-\bibliography{ref2.bib}
 
 \end{document}

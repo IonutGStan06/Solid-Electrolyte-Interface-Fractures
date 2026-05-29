@@ -1,89 +1,110 @@
 # Ritter Problem I — Clean Homotopy Algorithm
 
+> Confluence Cloud paste-ready version: equations are in text code blocks so Confluence will preserve notation even without a math plugin.
+
 This note rewrites Ritter's algorithm for **Problem I** in a notation that is easier to explain out loud. The goal is to keep the original problem data
 
-\[
+
+```text
 A_j,\ B_j,\ x_j,\ c_j,\ C_j,\ b_0,\ b_j
-\]
+```
+
 
 but remove the overly compressed bookkeeping in the paper.
 
 The central idea is:
 
-\[
-\text{relax the constraints} \rightarrow \text{start from an easy point} \rightarrow \text{follow the optimal solution as } t \downarrow 0.
-\]
 
-For a fixed active set, the solution is affine in \(t\). We keep that affine formula until one inactive constraint becomes tight or one active multiplier becomes zero. Then we change the active set and repeat.
+```text
+\text{relax the constraints} \rightarrow \text{start from an easy point} \rightarrow \text{follow the optimal solution as } t \downarrow 0.
+```
+
+
+For a fixed active set, the solution is affine in `t`. We keep that affine formula until one inactive constraint becomes tight or one active multiplier becomes zero. Then we change the active set and repeat.
 
 ---
 
 ## 1. Original Problem I
 
-We have \(k\) blocks of variables
+We have `k` blocks of variables
 
-\[
+
+```text
 x_1,\ldots,x_k,
 \qquad x_j\in \mathbb R^{n_j}.
-\]
+```
+
 
 The objective is block-separable:
 
-\[
+
+```text
 \max_{x_1,\ldots,x_k}
 \sum_{j=1}^k
 \left(c_j^T x_j-\frac12 x_j^T C_jx_j\right),
-\]
+```
 
-where each \(C_j\succ0\). The strict positive definiteness matters because the objective is strictly concave, so KKT conditions are sufficient for global optimality.
+
+where each `C_j\succ0`. The strict positive definiteness matters because the objective is strictly concave, so KKT conditions are sufficient for global optimality.
 
 The constraints are of two different types.
 
 ### Coupling constraints
 
-\[
+
+```text
 \sum_{j=1}^k A_jx_j\le b_0.
-\]
+```
+
 
 A coupling row involves several blocks at once. For example, one row might look like
 
-\[
+
+```text
 A_{1r}x_1+A_{2r}x_2+\cdots+A_{kr}x_k\le (b_0)_r.
-\]
+```
+
 
 No single block can check this row by itself.
 
 ### Local block constraints
 
-\[
+
+```text
 B_jx_j\le b_j,
 \qquad j=1,\ldots,k.
-\]
+```
 
-These are local. The constraint \(B_jx_j\le b_j\) only involves block \(j\).
+
+These are local. The constraint `B_jx_j\le b_j` only involves block `j`.
 
 So the problem has this structure:
 
-\[
+
+```text
 \begin{array}{c|c}
 \text{coupling constraints} & \sum_j A_jx_j\le b_0 \\
 \text{local block constraints} & B_jx_j\le b_j
 \end{array}
-\]
+```
+
 
 ---
 
-## 2. Why we do not just put the \(B_j\)'s into the \(A_j\)'s
+## 2. Why we do not just put the `B_j`'s into the `A_j`'s
 
 Algebraically, you *can* stack all constraints into one giant matrix. If
 
-\[
+
+```text
 x=\begin{pmatrix}x_1\\ \vdots\\ x_k\end{pmatrix},
-\]
+```
+
 
 then the whole feasible region can be written as
 
-\[
+
+```text
 \begin{pmatrix}
 A_1&A_2&\cdots&A_k\\
 B_1&0&\cdots&0\\
@@ -96,41 +117,48 @@ B_1&0&\cdots&0\\
 \begin{pmatrix}
 b_0\\b_1\\b_2\\\vdots\\b_k
 \end{pmatrix}.
-\]
+```
+
 
 So the issue is not mathematical possibility. The issue is decomposition.
 
-Ritter separates \(A\)-constraints from \(B\)-constraints because they play different algorithmic roles.
+Ritter separates `A`-constraints from `B`-constraints because they play different algorithmic roles.
 
 ### Coupling constraints need shared prices
 
-The multiplier for a coupling row is shared by all blocks. If row \(r\) of the coupling constraint is active, it has one multiplier \(v_r\), and this same \(v_r\) affects every block:
+The multiplier for a coupling row is shared by all blocks. If row `r` of the coupling constraint is active, it has one multiplier `v_r`, and this same `v_r` affects every block:
 
-\[
+
+```text
 C_jx_j+B_{j,I_j}^Tu_j+A_{j,I_0}^Tv=c_j.
-\]
+```
 
-That is why the coupling multiplier \(v\) appears in every block subproblem.
+
+That is why the coupling multiplier `v` appears in every block subproblem.
 
 ### Local constraints should stay local
 
-The multiplier for a local row of \(B_jx_j\le b_j\) belongs only to block \(j\). It should be part of \(u_j\), not part of the global coupling multiplier \(v\).
+The multiplier for a local row of `B_jx_j\le b_j` belongs only to block `j`. It should be part of `u_j`, not part of the global coupling multiplier `v`.
 
-A local constraint from block \(j\) cannot be violated or repaired by block \(i\ne j\). So there is no reason to put it into the global master system.
+A local constraint from block `j` cannot be violated or repaired by block `i\ne j`. So there is no reason to put it into the global master system.
 
-### What goes wrong if you put \(B\)'s into the master
+### What goes wrong if you put `B`'s into the master
 
-If you treat all \(B_j\)-rows as if they were coupling rows, then the master multiplier vector becomes huge:
+If you treat all `B_j`-rows as if they were coupling rows, then the master multiplier vector becomes huge:
 
-\[
+
+```text
 \dim(v)=m_0+\sum_{j=1}^k m_j
-\]
+```
+
 
 instead of just
 
-\[
+
+```text
 \dim(v)=m_0.
-\]
+```
+
 
 That destroys the whole point of the method. The method wants the large local parts to be solved separately inside each block, and only the genuinely coupling constraints to appear in the small master system.
 
@@ -138,11 +166,13 @@ That destroys the whole point of the method. The method wants the large local pa
 
 The distinction is:
 
-\[
+
+```text
 \boxed{
 A\text{-rows coordinate the blocks; }B\text{-rows are handled inside the blocks.}
 }
-\]
+```
+
 
 You can stack everything into one giant matrix if you want a black-box QP. But then you are no longer exploiting Ritter's decomposition.
 
@@ -150,30 +180,36 @@ You can stack everything into one giant matrix if you want a black-box QP. But t
 
 ## 3. Relaxed homotopy problem
 
-We introduce a scalar homotopy parameter \(t\ge0\). At \(t=0\), we recover the original problem.
+We introduce a scalar homotopy parameter `t\ge0`. At `t=0`, we recover the original problem.
 
 The relaxed problem is
 
-\[
+
+```text
 \max_{x_1,\ldots,x_k}
 \sum_{j=1}^k
 \left(c_j^T x_j-\frac12x_j^TC_jx_j\right)
-\]
+```
+
 
 subject to
 
-\[
+
+```text
 \sum_{j=1}^k A_jx_j\le b_0+e_0t,
-\]
+```
+
 
 and
 
-\[
+
+```text
 B_jx_j\le b_j+e_jt,
 \qquad j=1,\ldots,k.
-\]
+```
 
-The vectors \(e_0,e_1,\ldots,e_k\) are relaxation masks. They say which right-hand sides are allowed to move with \(t\).
+
+The vectors `e_0,e_1,\ldots,e_k` are relaxation masks. They say which right-hand sides are allowed to move with `t`.
 
 ---
 
@@ -181,119 +217,147 @@ The vectors \(e_0,e_1,\ldots,e_k\) are relaxation masks. They say which right-ha
 
 First compute the unconstrained maximizer block by block:
 
-\[
+
+```text
 x_j^{\rm free}=C_j^{-1}c_j.
-\]
+```
+
 
 If
 
-\[
+
+```text
 \sum_j A_jx_j^{\rm free}\le b_0,
 \qquad
 B_jx_j^{\rm free}\le b_j\quad \forall j,
-\]
+```
+
 
 then stop. The unconstrained maximizer is feasible, so it is the optimal solution.
 
 If not, define the violations
 
-\[
+
+```text
 \ell_0=\sum_{j=1}^k A_jx_j^{\rm free}-b_0,
-\]
+```
+
 
 and
 
-\[
+
+```text
 \ell_j=B_jx_j^{\rm free}-b_j.
-\]
+```
+
 
 A simple relaxation mask is
 
-\[
+
+```text
 (e_0)_r=
 \begin{cases}
 1,&(\ell_0)_r\ge0,\\
 0,&(\ell_0)_r<0,
 \end{cases}
-\]
+```
+
 
 and
 
-\[
+
+```text
 (e_j)_r=
 \begin{cases}
 1,&(\ell_j)_r\ge0,\\
 0,&(\ell_j)_r<0.
 \end{cases}
-\]
+```
+
 
 Choose
 
-\[
+
+```text
 t_0\ge \max\{(\ell_0)_r,(\ell_j)_r\}.
-\]
+```
 
-Then \(x^{\rm free}\) is feasible for the relaxed problem at \(t=t_0\).
 
-Now we decrease \(t\) from \(t_0\) to \(0\). The original problem is solved once we reach \(t=0\).
+Then `x^{\rm free}` is feasible for the relaxed problem at `t=t_0`.
+
+Now we decrease `t` from `t_0` to `0`. The original problem is solved once we reach `t=0`.
 
 ---
 
 ## 5. Active sets
 
-At a current value of \(t\), split the constraints into active and inactive constraints.
+At a current value of `t`, split the constraints into active and inactive constraints.
 
 ### Active coupling set
 
 Let
 
-\[
+
+```text
 I_0\subseteq\{1,\ldots,m_0\}
-\]
+```
+
 
 be the set of active coupling rows.
 
-For \(r\in I_0\),
+For `r\in I_0`,
 
-\[
+
+```text
 \sum_{j=1}^k A_{jr}x_j=(b_0)_r+(e_0)_r t.
-\]
+```
 
-Here \(A_{jr}\) means row \(r\) of \(A_j\).
+
+Here `A_{jr}` means row `r` of `A_j`.
 
 Use row-selection notation:
 
-\[
+
+```text
 A_{j,I_0}=\text{rows of }A_j\text{ indexed by }I_0.
-\]
+```
+
 
 Then the active coupling equalities are
 
-\[
+
+```text
 \sum_{j=1}^k A_{j,I_0}x_j=b_{0,I_0}+e_{0,I_0}t.
-\]
+```
+
 
 ### Active local block sets
 
-For each block \(j\), let
+For each block `j`, let
 
-\[
+
+```text
 I_j\subseteq\{1,\ldots,m_j\}
-\]
+```
 
-be the active local rows of \(B_jx_j\le b_j+e_jt\).
 
-For \(r\in I_j\),
+be the active local rows of `B_jx_j\le b_j+e_jt`.
 
-\[
+For `r\in I_j`,
+
+
+```text
 B_{jr}x_j=(b_j)_r+(e_j)_r t.
-\]
+```
+
 
 In row-selection notation,
 
-\[
+
+```text
 B_{j,I_j}x_j=b_{j,I_j}+e_{j,I_j}t.
-\]
+```
+
 
 ---
 
@@ -301,31 +365,39 @@ B_{j,I_j}x_j=b_{j,I_j}+e_{j,I_j}t.
 
 Use:
 
-\[
+
+```text
 v(t)=\text{multipliers for active coupling constraints }I_0,
-\]
+```
+
 
 and
 
-\[
+
+```text
 u_j(t)=\text{multipliers for active local constraints }I_j.
-\]
+```
+
 
 The full coupling multiplier vector has entries
 
-\[
+
+```text
 (v^{\rm full})_{I_0}=v,
 \qquad
 (v^{\rm full})_{I_0^c}=0.
-\]
+```
 
-The full local multiplier vector for block \(j\) has entries
 
-\[
+The full local multiplier vector for block `j` has entries
+
+
+```text
 (\mu_j)_{I_j}=u_j,
 \qquad
 (\mu_j)_{I_j^c}=0.
-\]
+```
+
 
 Inactive multipliers are zero because of complementary slackness. If a constraint has positive slack, its multiplier must be zero.
 
@@ -333,23 +405,29 @@ Inactive multipliers are zero because of complementary slackness. If a constrain
 
 ## 7. KKT equations for one fixed active set
 
-For the current active sets \((I_0,I_1,\ldots,I_k)\), the active KKT system is:
+For the current active sets `(I_0,I_1,\ldots,I_k)`, the active KKT system is:
 
-\[
+
+```text
 C_jx_j(t)+B_{j,I_j}^Tu_j(t)+A_{j,I_0}^Tv(t)=c_j,
 \qquad j=1,\ldots,k,
-\]
+```
 
-\[
+
+
+```text
 B_{j,I_j}x_j(t)=b_{j,I_j}+e_{j,I_j}t,
 \qquad j=1,\ldots,k,
-\]
+```
+
 
 and
 
-\[
+
+```text
 \sum_{j=1}^k A_{j,I_0}x_j(t)=b_{0,I_0}+e_{0,I_0}t.
-\]
+```
+
 
 These equations enforce stationarity and active equalities only.
 
@@ -357,23 +435,26 @@ They do **not** automatically enforce inactive constraints. Inactive constraints
 
 ---
 
-## 8. Solve each block in terms of \(v\) and \(t\)
+## 8. Solve each block in terms of `v` and `t`
 
-For block \(j\), define the local active KKT matrix
+For block `j`, define the local active KKT matrix
 
-\[
+
+```text
 K_j=
 \begin{pmatrix}
 C_j&B_{j,I_j}^T\\
 B_{j,I_j}&0
 \end{pmatrix}.
-\]
+```
 
-Assume the rows of \(B_{j,I_j}\) are linearly independent. Then \(K_j\) is nonsingular.
+
+Assume the rows of `B_{j,I_j}` are linearly independent. Then `K_j` is nonsingular.
 
 The block equations are
 
-\[
+
+```text
 K_j
 \begin{pmatrix}
 x_j(t)\\u_j(t)
@@ -383,23 +464,29 @@ x_j(t)\\u_j(t)
 c_j-A_{j,I_0}^Tv(t)\\
 b_{j,I_j}+e_{j,I_j}t
 \end{pmatrix}.
-\]
+```
 
-Because the left matrix is fixed and the right side is affine in \(t\) and \(v\), the solution is affine in \(t\) and \(v\).
+
+Because the left matrix is fixed and the right side is affine in `t` and `v`, the solution is affine in `t` and `v`.
 
 Write
 
-\[
-x_j(t,v)=a_j+d_jt-P_jv,
-\]
 
-\[
+```text
+x_j(t,v)=a_j+d_jt-P_jv,
+```
+
+
+
+```text
 u_j(t,v)=r_j+s_jt-Q_jv.
-\]
+```
+
 
 The coefficient blocks come from three solves:
 
-\[
+
+```text
 K_j
 \begin{pmatrix}
 a_j\\r_j
@@ -408,9 +495,11 @@ a_j\\r_j
 \begin{pmatrix}
 c_j\\b_{j,I_j}
 \end{pmatrix},
-\]
+```
 
-\[
+
+
+```text
 K_j
 \begin{pmatrix}
 d_j\\s_j
@@ -419,11 +508,13 @@ d_j\\s_j
 \begin{pmatrix}
 0\\e_{j,I_j}
 \end{pmatrix},
-\]
+```
+
 
 and
 
-\[
+
+```text
 K_j
 \begin{pmatrix}
 P_j\\Q_j
@@ -432,149 +523,190 @@ P_j\\Q_j
 \begin{pmatrix}
 A_{j,I_0}^T\\0
 \end{pmatrix}.
-\]
+```
+
 
 So each block has the clean closed form:
 
-\[
+
+```text
 \boxed{x_j(t,v)=a_j+d_jt-P_jv.}
-\]
+```
+
 
 and
 
-\[
+
+```text
 \boxed{u_j(t,v)=r_j+s_jt-Q_jv.}
-\]
+```
 
-If \(I_j=\varnothing\), then this reduces to
 
-\[
+If `I_j=\varnothing`, then this reduces to
+
+
+```text
 x_j(t,v)=C_j^{-1}c_j-C_j^{-1}A_{j,I_0}^Tv.
-\]
+```
+
 
 ---
 
-## 9. Determine \(v\) from active coupling constraints
+## 9. Determine `v` from active coupling constraints
 
 Now impose the active coupling equalities:
 
-\[
+
+```text
 \sum_{j=1}^k A_{j,I_0}x_j=b_{0,I_0}+e_{0,I_0}t.
-\]
+```
+
 
 Substitute
 
-\[
+
+```text
 x_j(t,v)=a_j+d_jt-P_jv.
-\]
+```
+
 
 Then
 
-\[
+
+```text
 \sum_j A_{j,I_0}(a_j+d_jt-P_jv)=b_{0,I_0}+e_{0,I_0}t.
-\]
+```
 
-Collect the \(v\)-terms:
 
-\[
+Collect the `v`-terms:
+
+
+```text
 \left(\sum_j A_{j,I_0}P_j\right)v
 =
 \left(\sum_j A_{j,I_0}a_j-b_{0,I_0}\right)
 +
 \left(\sum_j A_{j,I_0}d_j-e_{0,I_0}\right)t.
-\]
+```
+
 
 Define
 
-\[
-H=\sum_j A_{j,I_0}P_j,
-\]
 
-\[
+```text
+H=\sum_j A_{j,I_0}P_j,
+```
+
+
+
+```text
 q^a=\sum_j A_{j,I_0}a_j-b_{0,I_0},
-\]
+```
+
 
 and
 
-\[
+
+```text
 q^b=\sum_j A_{j,I_0}d_j-e_{0,I_0}.
-\]
+```
+
 
 Then
 
-\[
+
+```text
 Hv=q^a+q^bt.
-\]
+```
 
-Assuming \(H\) is nonsingular,
 
-\[
+Assuming `H` is nonsingular,
+
+
+```text
 \boxed{v(t)=v^a+v^bt}
-\]
+```
+
 
 where
 
-\[
+
+```text
 v^a=H^{-1}q^a,
 \qquad
 v^b=H^{-1}q^b.
-\]
+```
 
-If no coupling constraints are active, then \(I_0=\varnothing\), there is no master solve, and the full coupling multiplier is simply zero.
+
+If no coupling constraints are active, then `I_0=\varnothing`, there is no master solve, and the full coupling multiplier is simply zero.
 
 ---
 
-## 10. Now every unknown is affine in \(t\)
+## 10. Now every unknown is affine in `t`
 
-Substitute \(v(t)=v^a+v^bt\) into the block formulas.
+Substitute `v(t)=v^a+v^bt` into the block formulas.
 
 For each block,
 
-\[
+
+```text
 x_j(t)=a_j+d_jt-P_j(v^a+v^bt).
-\]
+```
+
 
 So
 
-\[
+
+```text
 \boxed{x_j(t)=x_j^a+x_j^bt}
-\]
+```
+
 
 where
 
-\[
+
+```text
 x_j^a=a_j-P_jv^a,
 \qquad
 x_j^b=d_j-P_jv^b.
-\]
+```
+
 
 Similarly,
 
-\[
+
+```text
 u_j(t)=r_j+s_jt-Q_j(v^a+v^bt),
-\]
+```
+
 
 so
 
-\[
+
+```text
 \boxed{u_j(t)=u_j^a+u_j^bt}
-\]
+```
+
 
 where
 
-\[
+
+```text
 u_j^a=r_j-Q_jv^a,
 \qquad
 u_j^b=s_j-Q_jv^b.
-\]
+```
+
 
 And the active coupling multipliers are
 
-\[
-\boxed{v(t)=v^a+v^bt.}
-\]
 
-This is the whole reason the method works: for a fixed active set, the primal variables and multipliers are straight-line functions of \(t\).
+```text
+\boxed{v(t)=v^a+v^bt.}
+```
+
+
+This is the whole reason the method works: for a fixed active set, the primal variables and multipliers are straight-line functions of `t`.
 
 ---
 
@@ -606,47 +738,59 @@ The inactive multipliers are zero by construction. Complementarity is automatic 
 
 Every quantity we need to keep nonnegative has the form
 
-\[
+
+```text
 g(t)=g^a+g^bt.
-\]
+```
 
-At the current parameter value \(T\), we know
 
-\[
+At the current parameter value `T`, we know
+
+
+```text
 g(T)\ge0.
-\]
+```
 
-We are moving downward in \(t\):
 
-\[
+We are moving downward in `t`:
+
+
+```text
 T\downarrow 0.
-\]
+```
 
-If \(g^b\le0\), then decreasing \(t\) does not make \(g(t)\) smaller. So \(g\) cannot block us.
 
-If \(g^b>0\), then decreasing \(t\) may reduce \(g(t)\). The possible blocking value is the root
+If `g^b\le0`, then decreasing `t` does not make `g(t)` smaller. So `g` cannot block us.
 
-\[
+If `g^b>0`, then decreasing `t` may reduce `g(t)`. The possible blocking value is the root
+
+
+```text
 t_*=-\frac{g^a}{g^b}.
-\]
+```
+
 
 If
 
-\[
+
+```text
 0\le t_*<T,
-\]
+```
 
-then \(t_*\) is a candidate next breakpoint.
 
-Because \(t\) moves downward, the first candidate hit is the **largest** candidate root below \(T\), not the smallest.
+then `t_*` is a candidate next breakpoint.
+
+Because `t` moves downward, the first candidate hit is the **largest** candidate root below `T`, not the smallest.
 
 So the next value is
 
-\[
+
+```text
 \boxed{
 T_{\rm next}=\max\left(\{0\}\cup\{\text{all candidate roots below }T\}\right).
 }
-\]
+```
+
 
 This is why Ritter takes a maximum of critical values.
 
@@ -660,217 +804,278 @@ There are four ways the current active set can stop being valid.
 
 ### Blocker 1: inactive local constraint becomes tight
 
-Take a local row \(r\notin I_j\).
+Take a local row `r\notin I_j`.
 
 Its slack is
 
-\[
+
+```text
 s_{jr}(t)=(b_j)_r+(e_j)_r t-B_{jr}x_j(t).
-\]
+```
+
 
 Using
 
-\[
+
+```text
 x_j(t)=x_j^a+x_j^bt,
-\]
+```
+
 
 we get
 
-\[
+
+```text
 s_{jr}(t)=s_{jr}^a+s_{jr}^bt
-\]
+```
+
 
 where
 
-\[
+
+```text
 s_{jr}^a=(b_j)_r-B_{jr}x_j^a,
-\]
+```
+
 
 and
 
-\[
+
+```text
 s_{jr}^b=(e_j)_r-B_{jr}x_j^b.
-\]
+```
 
-If \(s_{jr}^b>0\), compute
 
-\[
+If `s_{jr}^b>0`, compute
+
+
+```text
 t_{jr}^{\rm add}=-\frac{s_{jr}^a}{s_{jr}^b}.
-\]
+```
 
-If this lies in \([0,T)\), it is a candidate root.
+
+If this lies in `[0,T)`, it is a candidate root.
 
 At that value,
 
-\[
+
+```text
 s_{jr}(t)=0.
-\]
+```
+
 
 So a previously inactive local constraint becomes tight. The update is
 
-\[
+
+```text
 I_j\leftarrow I_j\cup\{r\}.
-\]
+```
+
 
 ---
 
 ### Blocker 2: active local multiplier becomes zero
 
-Take an active local row \(r\in I_j\).
+Take an active local row `r\in I_j`.
 
 Its multiplier is
 
-\[
+
+```text
 u_{jr}(t)=(u_j^a)_r+(u_j^b)_r t.
-\]
+```
 
-If \((u_j^b)_r>0\), compute
 
-\[
+If `(u_j^b)_r>0`, compute
+
+
+```text
 t_{jr}^{\rm drop}=-\frac{(u_j^a)_r}{(u_j^b)_r}.
-\]
+```
 
-If this lies in \([0,T)\), it is a candidate root.
+
+If this lies in `[0,T)`, it is a candidate root.
 
 At that value,
 
-\[
+
+```text
 u_{jr}(t)=0.
-\]
+```
+
 
 If we kept the constraint active below that value, the multiplier would become negative, violating KKT. The update is
 
-\[
+
+```text
 I_j\leftarrow I_j\setminus\{r\}.
-\]
+```
+
 
 ---
 
 ### Blocker 3: inactive coupling constraint becomes tight
 
-Take a coupling row \(r\notin I_0\).
+Take a coupling row `r\notin I_0`.
 
 Its slack is
 
-\[
+
+```text
 s_{0r}(t)=(b_0)_r+(e_0)_r t-
 \sum_{j=1}^k A_{jr}x_j(t).
-\]
+```
+
 
 Using
 
-\[
+
+```text
 x_j(t)=x_j^a+x_j^bt,
-\]
+```
+
 
 we get
 
-\[
+
+```text
 s_{0r}(t)=s_{0r}^a+s_{0r}^bt
-\]
+```
+
 
 where
 
-\[
+
+```text
 s_{0r}^a=(b_0)_r-\sum_j A_{jr}x_j^a,
-\]
+```
+
 
 and
 
-\[
+
+```text
 s_{0r}^b=(e_0)_r-\sum_j A_{jr}x_j^b.
-\]
+```
 
-If \(s_{0r}^b>0\), compute
 
-\[
+If `s_{0r}^b>0`, compute
+
+
+```text
 t_{0r}^{\rm add}=-\frac{s_{0r}^a}{s_{0r}^b}.
-\]
+```
 
-If this lies in \([0,T)\), it is a candidate root.
+
+If this lies in `[0,T)`, it is a candidate root.
 
 At that value, the coupling row becomes tight. The update is
 
-\[
-I_0\leftarrow I_0\cup\{r\}.
-\]
 
-This changes the master system for \(v(t)\).
+```text
+I_0\leftarrow I_0\cup\{r\}.
+```
+
+
+This changes the master system for `v(t)`.
 
 ---
 
 ### Blocker 4: active coupling multiplier becomes zero
 
-Take an active coupling row \(r\in I_0\).
+Take an active coupling row `r\in I_0`.
 
 Its multiplier is
 
-\[
+
+```text
 v_r(t)=(v^a)_r+(v^b)_r t.
-\]
+```
 
-If \((v^b)_r>0\), compute
 
-\[
+If `(v^b)_r>0`, compute
+
+
+```text
 t_{0r}^{\rm drop}=-\frac{(v^a)_r}{(v^b)_r}.
-\]
+```
 
-If this lies in \([0,T)\), it is a candidate root.
+
+If this lies in `[0,T)`, it is a candidate root.
 
 At that value,
 
-\[
+
+```text
 v_r(t)=0.
-\]
+```
+
 
 If we kept the coupling row active below that value, its multiplier would become negative. The update is
 
-\[
+
+```text
 I_0\leftarrow I_0\setminus\{r\}.
-\]
+```
+
 
 ---
 
 ## 14. The iteration
 
-At current \(T\):
+At current `T`:
 
-1. Fix active sets \(I_0,I_1,\ldots,I_k\).
+1. Fix active sets `I_0,I_1,\ldots,I_k`.
 2. Solve each block system to get
 
-   \[
+   
+```text
    x_j(t,v)=a_j+d_jt-P_jv,
-   \]
+   
+```
+
 
    and
 
-   \[
+   
+```text
    u_j(t,v)=r_j+s_jt-Q_jv.
-   \]
+   
+```
+
 
 3. Use active coupling equalities to get
 
-   \[
+   
+```text
    v(t)=v^a+v^bt.
-   \]
+   
+```
+
 
 4. Substitute back to get
 
-   \[
+   
+```text
    x_j(t)=x_j^a+x_j^bt,
    \qquad
    u_j(t)=u_j^a+u_j^bt.
-   \]
+   
+```
+
 
 5. Compute all blocker roots.
 6. Set
 
-   \[
+   
+```text
    T_{\rm next}=\max\left(\{0\}\cup\{\text{candidate blocker roots in }[0,T)\}\right).
-   \]
+   
+```
 
-7. If \(T_{\rm next}=0\), stop. The current formula at \(t=0\) gives the original optimum.
-8. If \(T_{\rm next}>0\), update the active set according to the blocker and repeat.
+
+7. If `T_{\rm next}=0`, stop. The current formula at `t=0` gives the original optimum.
+8. If `T_{\rm next}>0`, update the active set according to the blocker and repeat.
 
 ---
 
@@ -882,19 +1087,23 @@ They stay valid because we explicitly compute when they would fail.
 
 For every inactive local or coupling row, the slack is affine:
 
-\[
+
+```text
 s(t)=s^a+s^bt.
-\]
+```
 
-At the current \(T\), we have \(s(T)\ge0\). If the slack would become negative before \(t=0\), it must cross zero first. That zero is one of the candidate blocker roots.
 
-By choosing the largest candidate root below \(T\), we stop at the first possible failure as \(t\) decreases.
+At the current `T`, we have `s(T)\ge0`. If the slack would become negative before `t=0`, it must cross zero first. That zero is one of the candidate blocker roots.
+
+By choosing the largest candidate root below `T`, we stop at the first possible failure as `t` decreases.
 
 Thus all inactive constraints remain feasible on the interval
 
-\[
+
+```text
 [T_{\rm next},T].
-\]
+```
+
 
 ---
 
@@ -904,23 +1113,29 @@ Same logic.
 
 Every active multiplier is affine:
 
-\[
+
+```text
 u(t)=u^a+u^bt,
-\]
+```
+
 
 or
 
-\[
+
+```text
 v(t)=v^a+v^bt.
-\]
+```
 
-At the current \(T\), all active multipliers are nonnegative. If one would become negative before \(t=0\), it must cross zero first. That zero is a blocker root.
 
-By stopping at the largest root below \(T\), all active multipliers remain nonnegative on
+At the current `T`, all active multipliers are nonnegative. If one would become negative before `t=0`, it must cross zero first. That zero is a blocker root.
 
-\[
+By stopping at the largest root below `T`, all active multipliers remain nonnegative on
+
+
+```text
 [T_{\rm next},T].
-\]
+```
+
 
 ---
 
@@ -937,7 +1152,8 @@ Dual feasibility fails when an active multiplier becomes negative. The first sig
 
 Each of these can happen either locally or for the coupling constraints. Therefore there are exactly four cases:
 
-\[
+
+```text
 \begin{array}{c|c|c}
 \text{event} & \text{meaning} & \text{update}\\
 \hline
@@ -946,7 +1162,8 @@ Each of these can happen either locally or for the coupling constraints. Therefo
 \text{inactive coupling slack hits zero} & A\text{-row becomes tight} & I_0\leftarrow I_0\cup\{r\}\\
 \text{active coupling multiplier hits zero} & A\text{-row loses force} & I_0\leftarrow I_0\setminus\{r\}
 \end{array}
-\]
+```
+
 
 That is all Ritter's four cases mean.
 
@@ -954,32 +1171,32 @@ That is all Ritter's four cases mean.
 
 ## 18. What happens at a breakpoint
 
-Suppose \(T_{\rm next}>0\).
+Suppose `T_{\rm next}>0`.
 
-At \(t=T_{\rm next}\), one of the four blocker events occurs.
+At `t=T_{\rm next}`, one of the four blocker events occurs.
 
 The old affine segment is valid down to this value. At the breakpoint, the old and new descriptions meet at the same point.
 
 ### If a constraint is added
 
-The constraint has zero slack at the breakpoint. So adding it as an equality does not change the current point. It only changes the future direction of the path for smaller \(t\).
+The constraint has zero slack at the breakpoint. So adding it as an equality does not change the current point. It only changes the future direction of the path for smaller `t`.
 
 ### If a constraint is dropped
 
-The multiplier is zero at the breakpoint. So removing its multiplier from stationarity does not change the current stationarity equation. It only changes the future direction of the path for smaller \(t\).
+The multiplier is zero at the breakpoint. So removing its multiplier from stationarity does not change the current stationarity equation. It only changes the future direction of the path for smaller `t`.
 
 This is why the path is continuous but piecewise linear.
 
 ---
 
-## 19. Degeneracy and same-\(t\) blockers
+## 19. Degeneracy and same-`t` blockers
 
 The clean story assumes:
 
 1. only one blocker happens at a time;
 2. any added active row is linearly independent of the existing active rows.
 
-If several blockers happen at the same \(t\), or if a new active row is linearly dependent, then we are in a degenerate case.
+If several blockers happen at the same `t`, or if a new active row is linearly dependent, then we are in a degenerate case.
 
 ### Dropping constraints is safe
 
@@ -991,16 +1208,18 @@ If a new local or coupling row becomes active, we need the new active row to be 
 
 If the added row is dependent, there are two possibilities:
 
-1. there is no feasible continuation below the current \(t\);
+1. there is no feasible continuation below the current `t`;
 2. one old active row must be replaced by the new row.
 
 So a practical explanation is:
 
-\[
+
+```text
 \boxed{
 \text{Nondegenerate add: add the row. Degenerate add: replace an old row or detect infeasibility.}
 }
-\]
+```
+
 
 For oral explanation, you can say:
 
@@ -1010,42 +1229,48 @@ For oral explanation, you can say:
 
 ## 20. Convergence idea
 
-For a fixed active set, the solution and multipliers are affine functions of \(t\). The active set is valid on an interval of \(t\)-values because it is defined by affine inequalities:
+For a fixed active set, the solution and multipliers are affine functions of `t`. The active set is valid on an interval of `t`-values because it is defined by affine inequalities:
 
-\[
+
+```text
 \text{inactive slacks}\ge0,
 \qquad
 \text{active multipliers}\ge0.
-\]
+```
+
 
 The method moves from one interval to the next. At the end of an interval, the active set changes.
 
 There are only finitely many possible active sets:
 
-\[
+
+```text
 I_0\subseteq\{1,\ldots,m_0\},
 \qquad
 I_j\subseteq\{1,\ldots,m_j\}.
-\]
+```
 
-In the nondegenerate case, each pivot gives a genuine interval to the left, so \(t\) decreases strictly. With the degeneracy rules, same-\(t\) cleanup pivots cannot continue forever; they either find a valid active basis or prove infeasibility below that \(t\).
+
+In the nondegenerate case, each pivot gives a genuine interval to the left, so `t` decreases strictly. With the degeneracy rules, same-`t` cleanup pivots cannot continue forever; they either find a valid active basis or prove infeasibility below that `t`.
 
 Therefore the method terminates with one of two outcomes:
 
-1. \(t=0\), in which case the formula \(x_j(0)\) gives the optimum of the original problem;
-2. a positive \(t_p\) below which no feasible continuation exists, in which case the original problem is infeasible.
+1. `t=0`, in which case the formula `x_j(0)` gives the optimum of the original problem;
+2. a positive `t_p` below which no feasible continuation exists, in which case the original problem is infeasible.
 
 ---
 
-## 21. Why reaching \(t=0\) proves optimality
+## 21. Why reaching `t=0` proves optimality
 
-At \(t=0\), the relaxed constraints are the original constraints:
+At `t=0`, the relaxed constraints are the original constraints:
 
-\[
+
+```text
 \sum_j A_jx_j\le b_0,
 \qquad
 B_jx_j\le b_j.
-\]
+```
+
 
 The algorithm has maintained the full KKT conditions:
 
@@ -1056,11 +1281,13 @@ The algorithm has maintained the full KKT conditions:
 
 Because the objective is strictly concave and the constraints are linear, these KKT conditions are sufficient for global optimality.
 
-So if the algorithm reaches \(t=0\), then
+So if the algorithm reaches `t=0`, then
 
-\[
+
+```text
 \boxed{x_1(0),\ldots,x_k(0)\text{ solve the original problem.}}
-\]
+```
+
 
 ---
 
@@ -1131,27 +1358,29 @@ Input: C_j, c_j, A_j, B_j, b_0, b_j.
 
 Here is a short presentation script.
 
-> We begin from the unconstrained maximizer. If it is infeasible, we relax the right-hand sides by adding \(e t\), choosing \(t=t_0\) large enough so the unconstrained maximizer is feasible. Then we decrease \(t\) to zero.
+> We begin from the unconstrained maximizer. If it is infeasible, we relax the right-hand sides by adding `e t`, choosing `t=t_0` large enough so the unconstrained maximizer is feasible. Then we decrease `t` to zero.
 >
-> At any moment, we guess which constraints are active. For that active set, inactive multipliers are zero, and active constraints are equalities. Solving the block KKT systems gives each \(x_j\) and local multiplier \(u_j\) as affine functions of \(t\) and the coupling multiplier \(v\).
+> At any moment, we guess which constraints are active. For that active set, inactive multipliers are zero, and active constraints are equalities. Solving the block KKT systems gives each `x_j` and local multiplier `u_j` as affine functions of `t` and the coupling multiplier `v`.
 >
-> The active coupling constraints determine \(v\) as an affine function of \(t\). Once we substitute this back, everything is affine in \(t\): the primal variables, the local multipliers, and the coupling multipliers.
+> The active coupling constraints determine `v` as an affine function of `t`. Once we substitute this back, everything is affine in `t`: the primal variables, the local multipliers, and the coupling multipliers.
 >
-> The active set remains valid only while inactive slacks stay nonnegative and active multipliers stay nonnegative. Each of those quantities is affine in \(t\), so we compute where each one would hit zero. Since \(t\) decreases, the next breakpoint is the largest such root below the current \(t\).
+> The active set remains valid only while inactive slacks stay nonnegative and active multipliers stay nonnegative. Each of those quantities is affine in `t`, so we compute where each one would hit zero. Since `t` decreases, the next breakpoint is the largest such root below the current `t`.
 >
 > At the breakpoint, either a slack hits zero, so we add that constraint, or a multiplier hits zero, so we drop that constraint. Then we recompute the affine formula and continue.
 >
-> If we reach \(t=0\), the KKT conditions hold for the original problem, so the point is globally optimal. If the path cannot be continued below some positive \(t\), the original feasible set is empty.
+> If we reach `t=0`, the KKT conditions hold for the original problem, so the point is globally optimal. If the path cannot be continued below some positive `t`, the original feasible set is empty.
 
 ---
 
 ## 24. The one-line memory version
 
-\[
+
+```text
 \boxed{
 \text{Fixed active set }\Rightarrow x,u,v\text{ affine in }t;
 \quad
 \text{first zero slack/multiplier changes the active set.}
 }
-\]
+```
+
 
